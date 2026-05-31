@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Pipeline Kit - Analyst Decision Dashboard</title>
+  <style>
+    :root {
+      --bg: #eef2f7;
+      --surface: #ffffff;
+      --surface-soft: #f9fafb;
+      --ink: #111827;
+      --muted: #667085;
+      --line: #cfd8e3;
+      --line-soft: #e7ecf2;
+      --blue: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --green: #16a36d;
+      --green-soft: #edfff7;
+      --red: #d92d4c;
+      --red-soft: #fff1f3;
+      --amber: #d98319;
+      --amber-soft: #fff7e6;
+      --teal: #087f8c;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.06);
+      --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: none;
+      overflow: visible;
+    }
+
+    .dashboard {
+      width: min(1480px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 18px 0 48px;
+    }
+
+    .workspace-header {
+      min-height: 52px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      background: #111827;
+      color: #f8fafc;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 8px;
+      background: #1f2937;
+      font-weight: 800;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand > div:last-child {
+      min-width: 0;
+    }
+
+    .brand span {
+      display: block;
+      color: #cbd5e1;
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .tool {
+      min-height: 32px;
+      padding: 0 10px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #f8fafc;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: default;
+    }
+
+    .tool.primary {
+      background: #f8fafc;
+      color: #111827;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      align-items: stretch;
+      margin-bottom: 16px;
+    }
+
+    .hero,
+    .panel,
+    .kpi,
+    .chart,
+    .action,
+    .data-table {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 4px rgba(29, 78, 216, 0.04);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      max-width: 760px;
+      font-size: 40px;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      margin: 0;
+      max-width: 760px;
+      color: #344054;
+      font-size: 16px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .badge,
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line-soft);
+      border-radius: 999px;
+      background: #f8fafc;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge {
+      min-height: 28px;
+      padding: 5px 9px;
+    }
+
+    .chip {
+      min-height: 24px;
+      padding: 3px 8px;
+    }
+
+    .badge.red,
+    .chip.red {
+      border-color: #f3bcc6;
+      background: var(--red-soft);
+      color: #9f1239;
+    }
+
+    .badge.green,
+    .chip.green {
+      border-color: #b9e9d4;
+      background: var(--green-soft);
+      color: #087443;
+    }
+
+    .badge.blue,
+    .chip.blue {
+      border-color: #bfd4ff;
+      background: var(--blue-soft);
+      color: #123c8c;
+    }
+
+    .badge.amber,
+    .chip.amber {
+      border-color: #f5d49b;
+      background: var(--amber-soft);
+      color: #92400e;
+    }
+
+    .verdict {
+      width: 248px;
+      align-self: stretch;
+      display: grid;
+      gap: 10px;
+      align-content: center;
+      padding: 16px;
+      border: 1px solid #dbe5f3;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .verdict b {
+      display: block;
+      color: var(--blue);
+      font-size: 14px;
+    }
+
+    .verdict strong {
+      display: block;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    .verdict span,
+    .verdict em {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-style: normal;
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel h2,
+    .chart h2,
+    .data-table h2,
+    .action h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .panel p,
+    .chart p,
+    .data-table p,
+    .action p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .run-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .run-item {
+      min-height: 82px;
+      padding: 12px;
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      background: var(--surface-soft);
+    }
+
+    .run-item b,
+    .run-item span {
+      display: block;
+    }
+
+    .run-item b {
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .run-item span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .run-item.pass {
+      border-color: #b9e9d4;
+      background: var(--green-soft);
+    }
+
+    .run-item.warn {
+      border-color: #f5d49b;
+      background: var(--amber-soft);
+    }
+
+    .tabs {
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      display: flex;
+      gap: 6px;
+      margin: 0 0 16px;
+      padding: 7px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow-soft);
+      overflow-x: auto;
+    }
+
+    .tab {
+      min-height: 36px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background: #111827;
+      color: #ffffff;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(190px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .kpi {
+      min-height: 178px;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      gap: 10px;
+    }
+
+    .kpi-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 20px;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background: var(--blue);
+    }
+
+    .dot.red {
+      background: var(--red);
+    }
+
+    .dot.green {
+      background: var(--green);
+    }
+
+    .dot.amber {
+      background: var(--amber);
+    }
+
+    .kpi-value {
+      color: #0a0a0a;
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .kpi-note,
+    .kpi-foot {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .kpi-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .content-grid,
+    .scenario {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .drivers-grid,
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .chart,
+    .data-table,
+    .action {
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .chart.wide,
+    .action.wide,
+    .data-table.wide {
+      grid-column: 1 / -1;
+    }
+
+    .story-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .story-row {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      background: var(--surface-soft);
+    }
+
+    .story-row b {
+      color: var(--blue);
+      font-size: 13px;
+    }
+
+    .story-row span {
+      color: #344054;
+      font-size: 13px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend i {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .slider-panel {
+      min-height: 330px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #111827;
+      color: #f8fafc;
+      box-shadow: var(--shadow);
+    }
+
+    .slider-panel p {
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+
+    .slider-panel label {
+      display: block;
+      margin: 18px 0 8px;
+      color: #e5e7eb;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .slider-panel input[type="range"] {
+      width: 100%;
+      accent-color: #60a5fa;
+    }
+
+    .scenario-number {
+      margin-top: 18px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .scenario-number b,
+    .scenario-number strong {
+      display: block;
+    }
+
+    .scenario-number strong {
+      margin-top: 4px;
+      color: #ffffff;
+      font-size: 32px;
+      letter-spacing: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line-soft);
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    th {
+      color: #344054;
+      font-weight: 800;
+      background: var(--surface-soft);
+    }
+
+    .mono {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    @media (max-width: 1180px) {
+      .topbar,
+      .content-grid,
+      .scenario {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .verdict {
+        width: auto;
+      }
+    }
+
+    @media (max-width: 780px) {
+      .dashboard {
+        width: min(100vw - 20px, 720px);
+        padding-top: 10px;
+      }
+
+      .workspace-header,
+      .hero,
+      .drivers-grid,
+      .evidence-grid,
+      .kpi-row {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace-header {
+        align-items: start;
+      }
+
+      .toolbar {
+        justify-content: flex-start;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .dashboard {
+        width: calc(100vw - 14px);
+      }
+
+      .workspace-header,
+      .hero,
+      .panel,
+      .chart,
+      .data-table,
+      .kpi {
+        padding: 12px;
+      }
+
+      .tool {
+        min-height: 30px;
+        padding: 0 8px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .kpi-value {
+        font-size: 32px;
+      }
+
+      .tabs {
+        top: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="dashboard">
+    <header class="workspace-header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">AI</div>
+        <div>
+          <strong>AI Pipeline Kit</strong>
+          <!-- FROM: run.json, 00_data_contract.md -->
+          <span>source_file.csv · row_count rows · analyst-v2 · generated in Korean</span>
+        </div>
+      </div>
+      <div class="toolbar" aria-label="대시보드 도구">
+        <button class="tool" type="button">metrics.json</button>
+        <button class="tool" type="button">analysis.ipynb</button>
+        <button class="tool primary" type="button">validation pending</button>
+      </div>
+    </header>
+
+    <section class="topbar" aria-label="핵심 요약">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Analyst Decision Dashboard</p>
+          <!-- FROM: 03_problem_definition.md, 05_analysis_report.md -->
+          <h1>핵심 분석 질문을 한 문장으로 입력한다</h1>
+          <p class="hero-copy">04_metrics.json과 05_analysis_report.md에서 확인된 핵심 판정, 기준값, 우선 액션을 2문장 이내로 요약한다.</p>
+          <div class="hero-badges">
+            <!-- FROM: 04_metrics.json -->
+            <span class="badge blue">기준: 핵심 KPI 기준값</span>
+            <span class="badge red">위험: 가장 중요한 악화 요인</span>
+            <span class="badge green">기회: 즉시 실행 가능한 개선안</span>
+          </div>
+        </div>
+        <aside class="verdict" aria-label="최종 판정">
+          <!-- FROM: 07_executive_report.md -->
+          <b>최종 판정</b>
+          <strong>의사결정 문장</strong>
+          <span>핵심 KPI가 어떤 상태인지 짧게 설명한다.</span>
+          <em>이번 주 액션: 실행 과제 1개</em>
+        </aside>
+      </div>
+
+      <aside class="panel">
+        <h2>검증 상태</h2>
+        <p>대시보드에 표시된 값은 아래 산출물과 맞아야 한다.</p>
+        <div class="run-grid">
+          <div class="run-item pass">
+            <b>metrics.json</b>
+            <span>핵심 KPI 값과 단위 확인</span>
+          </div>
+          <div class="run-item pass">
+            <b>analysis.py</b>
+            <span>재현 가능한 계산 코드 확인</span>
+          </div>
+          <div class="run-item pass">
+            <b>analysis.ipynb</b>
+            <span>분석가용 노트북 생성 확인</span>
+          </div>
+          <div class="run-item warn">
+            <b>데이터 품질</b>
+            <span>결측, 중복, 표본 제한 사항</span>
+          </div>
+          <div class="run-item">
+            <b>Run ID</b>
+            <!-- FROM: run.json -->
+            <span class="mono">run_id</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <nav class="tabs" aria-label="대시보드 탭">
+      <button class="tab active" type="button" data-tab="overview">Overview</button>
+      <button class="tab" type="button" data-tab="drivers">Drivers</button>
+      <button class="tab" type="button" data-tab="scenario">Scenario</button>
+      <button class="tab" type="button" data-tab="evidence">Evidence</button>
+    </nav>
+
+    <section id="overview" class="view active">
+      <div class="kpi-row">
+        <article class="kpi">
+          <!-- FROM: 04_metrics.json -->
+          <div class="kpi-head"><span>핵심 KPI 1</span><i class="dot amber" aria-hidden="true"></i></div>
+          <div class="kpi-value">—</div>
+          <div class="kpi-note">분자/분모 또는 계산 기준</div>
+          <div class="kpi-foot">baseline: 비교 기준</div>
+          <div class="kpi-chips"><span class="chip amber">주의</span><span class="chip">n=sample</span></div>
+        </article>
+        <article class="kpi">
+          <div class="kpi-head"><span>핵심 KPI 2</span><i class="dot red" aria-hidden="true"></i></div>
+          <div class="kpi-value">—</div>
+          <div class="kpi-note">가장 중요한 위험 또는 기회 지표</div>
+          <div class="kpi-foot">segment: 주요 세그먼트</div>
+          <div class="kpi-chips"><span class="chip red">조치 필요</span><span class="chip blue">gap</span></div>
+        </article>
+        <article class="kpi">
+          <div class="kpi-head"><span>핵심 KPI 3</span><i class="dot blue" aria-hidden="true"></i></div>
+          <div class="kpi-value">—</div>
+          <div class="kpi-note">비교 또는 증감 설명</div>
+          <div class="kpi-foot">unit: 단위</div>
+          <div class="kpi-chips"><span class="chip blue">관찰</span><span class="chip">metric</span></div>
+        </article>
+        <article class="kpi">
+          <div class="kpi-head"><span>핵심 KPI 4</span><i class="dot green" aria-hidden="true"></i></div>
+          <div class="kpi-value">—</div>
+          <div class="kpi-note">개선 가능성 또는 안정 구간</div>
+          <div class="kpi-foot">confidence: 근거 수준</div>
+          <div class="kpi-chips"><span class="chip green">기회</span><span class="chip">actionable</span></div>
+        </article>
+      </div>
+
+      <div class="content-grid">
+        <article class="chart">
+          <h2>어떤 세그먼트가 전체 결과를 가장 크게 움직이는가?</h2>
+          <p>핵심 KPI의 세그먼트별 차이를 정렬된 막대 차트로 보여준다.</p>
+          <!-- FROM: 04_metrics.json, 05_analysis_report.md -->
+          <svg viewBox="0 0 720 300" role="img" aria-label="세그먼트별 핵심 KPI 비교">
+            <line x1="130" y1="248" x2="680" y2="248" stroke="#d9e0ea" stroke-width="1"/>
+            <text x="130" y="272" font-size="12" fill="#667085">0</text>
+            <text x="356" y="272" font-size="12" fill="#667085">중간값</text>
+            <text x="620" y="272" font-size="12" fill="#667085">최대값</text>
+            <g>
+              <text x="20" y="70" font-size="14" fill="#344054">세그먼트 A</text>
+              <rect x="130" y="48" width="470" height="28" rx="4" fill="#d92d4c"/>
+              <text x="614" y="68" font-size="14" fill="#111827">—</text>
+            </g>
+            <g>
+              <text x="20" y="136" font-size="14" fill="#344054">세그먼트 B</text>
+              <rect x="130" y="114" width="260" height="28" rx="4" fill="#d98319"/>
+              <text x="405" y="134" font-size="14" fill="#111827">—</text>
+            </g>
+            <g>
+              <text x="20" y="202" font-size="14" fill="#344054">세그먼트 C</text>
+              <rect x="130" y="180" width="130" height="28" rx="4" fill="#16a36d"/>
+              <text x="276" y="200" font-size="14" fill="#111827">—</text>
+            </g>
+            <line x1="422" y1="32" x2="422" y2="248" stroke="#2563eb" stroke-dasharray="5 5"/>
+            <text x="432" y="36" font-size="12" fill="#2563eb">전체 기준</text>
+          </svg>
+        </article>
+
+        <aside class="panel">
+          <h2>스토리 라인</h2>
+          <p>보고서와 같은 순서로 읽히는 4칸 요약.</p>
+          <!-- FROM: 03_problem_definition.md, 05_analysis_report.md -->
+          <div class="story-list">
+            <div class="story-row"><b>현황</b><span>현재 상태와 문제 크기를 쓴다.</span></div>
+            <div class="story-row"><b>원인</b><span>가장 설명력이 큰 드라이버를 쓴다.</span></div>
+            <div class="story-row"><b>결과</b><span>비즈니스 영향 또는 운영 리스크를 쓴다.</span></div>
+            <div class="story-row"><b>기회</b><span>다음 액션과 기대 효과를 쓴다.</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="drivers" class="view">
+      <div class="drivers-grid">
+        <article class="chart">
+          <h2>상위 드라이버는 어떤 차이를 만드는가?</h2>
+          <p>세그먼트, 변수, 범주별 격차를 실제 계산값으로 표시한다.</p>
+          <!-- FROM: 05_analysis_report.md -->
+          <svg viewBox="0 0 620 330" role="img" aria-label="상위 드라이버별 KPI 격차">
+            <line x1="70" y1="260" x2="580" y2="260" stroke="#d9e0ea"/>
+            <line x1="70" y1="70" x2="70" y2="260" stroke="#d9e0ea"/>
+            <rect x="110" y="104" width="64" height="156" rx="4" fill="#d92d4c"/>
+            <rect x="220" y="132" width="64" height="128" rx="4" fill="#d98319"/>
+            <rect x="330" y="164" width="64" height="96" rx="4" fill="#2563eb"/>
+            <rect x="440" y="204" width="64" height="56" rx="4" fill="#16a36d"/>
+            <text x="105" y="92" font-size="13" fill="#111827">—</text>
+            <text x="215" y="120" font-size="13" fill="#111827">—</text>
+            <text x="325" y="152" font-size="13" fill="#111827">—</text>
+            <text x="438" y="192" font-size="13" fill="#111827">—</text>
+            <text x="100" y="292" font-size="12" fill="#667085">driver A</text>
+            <text x="212" y="306" font-size="12" fill="#667085">driver B</text>
+            <text x="326" y="292" font-size="12" fill="#667085">driver C</text>
+            <text x="435" y="306" font-size="12" fill="#667085">driver D</text>
+          </svg>
+        </article>
+
+        <article class="chart">
+          <h2>드라이버별 조치 우선순위는 어떻게 다른가?</h2>
+          <p>위험 크기와 조치 가능성을 함께 보여준다.</p>
+          <!-- FROM: 04_kpi_summary.md, 05_analysis_report.md -->
+          <svg viewBox="0 0 560 330" role="img" aria-label="드라이버별 조치 우선순위">
+            <circle cx="170" cy="108" r="44" fill="#ffe4e8"/>
+            <circle cx="170" cy="108" r="30" fill="#d92d4c"/>
+            <text x="152" y="114" font-size="14" fill="#ffffff">높음</text>
+            <text x="124" y="174" font-size="13" fill="#344054">우선 조치</text>
+            <circle cx="340" cy="148" r="36" fill="#fff2dc"/>
+            <circle cx="340" cy="148" r="22" fill="#d98319"/>
+            <text x="328" y="154" font-size="13" fill="#ffffff">중</text>
+            <text x="302" y="206" font-size="13" fill="#344054">관찰 필요</text>
+            <circle cx="250" cy="238" r="34" fill="#dcfce7"/>
+            <circle cx="250" cy="238" r="18" fill="#16a36d"/>
+            <text x="238" y="244" font-size="12" fill="#ffffff">저</text>
+            <text x="212" y="294" font-size="13" fill="#344054">안정 구간</text>
+          </svg>
+        </article>
+
+        <article class="chart wide">
+          <h2>두 축을 같이 보면 어느 관측치가 우선인가?</h2>
+          <p>상위 드라이버 두 개를 축으로 놓고 우선 타겟, 관찰 구간, 안정 구간을 구분한다.</p>
+          <!-- FROM: 05_analysis_report.md -->
+          <svg viewBox="0 0 980 300" role="img" aria-label="드라이버 2축 비교">
+            <rect x="70" y="32" width="860" height="210" fill="#f8fafc" stroke="#d9e0ea"/>
+            <line x1="500" y1="32" x2="500" y2="242" stroke="#d9e0ea"/>
+            <line x1="70" y1="137" x2="930" y2="137" stroke="#d9e0ea"/>
+            <text x="76" y="58" font-size="12" fill="#667085">축 Y 높음</text>
+            <text x="836" y="232" font-size="12" fill="#667085">축 X 높음</text>
+            <circle cx="170" cy="74" r="10" fill="#d92d4c" opacity="0.88"/>
+            <circle cx="220" cy="88" r="7" fill="#d92d4c" opacity="0.72"/>
+            <circle cx="290" cy="104" r="12" fill="#d92d4c" opacity="0.68"/>
+            <circle cx="390" cy="82" r="8" fill="#d98319" opacity="0.78"/>
+            <circle cx="620" cy="176" r="9" fill="#16a36d" opacity="0.82"/>
+            <circle cx="760" cy="196" r="11" fill="#16a36d" opacity="0.72"/>
+            <circle cx="830" cy="164" r="7" fill="#16a36d" opacity="0.76"/>
+            <text x="146" y="46" font-size="13" fill="#d92d4c">우선 타겟</text>
+          </svg>
+          <div class="legend">
+            <span><i style="background:#d92d4c"></i>높은 위험</span>
+            <span><i style="background:#d98319"></i>관찰 필요</span>
+            <span><i style="background:#16a36d"></i>안정 구간</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="scenario" class="view">
+      <div class="scenario">
+        <div class="slider-panel">
+          <h2>룰/처리 용량 시뮬레이터</h2>
+          <p>개입 효과 데이터가 없으면 KPI 개선 예측이 아니라 관측 데이터 기반 룰 비교로 표시한다.</p>
+          <!-- FROM: 05_analysis_report.md -->
+          <label for="capacity">처리 가능 대상 수: <span id="capacityLabel">2,000</span>명</label>
+          <input id="capacity" type="range" min="500" max="4000" step="100" value="2000">
+          <div class="scenario-number">
+            <b>집중 룰 기준 예상 포함 이벤트</b>
+            <strong id="scenarioValue">—</strong>
+            <span>선택된 룰의 관측 이벤트율을 적용한 단순 비교값</span>
+          </div>
+        </div>
+
+        <article class="chart">
+          <h2>룰을 넓히면 대상 규모와 이벤트율은 어떻게 바뀌는가?</h2>
+          <p>실제 개입 효과가 아니라 현재 표본에서 관측된 룰별 규모와 이벤트 집중도 비교다.</p>
+          <!-- FROM: 05_analysis_report.md, 08_validation_report.md -->
+          <svg viewBox="0 0 680 330" role="img" aria-label="룰별 대상 규모와 이벤트율">
+            <line x1="80" y1="260" x2="620" y2="260" stroke="#d9e0ea"/>
+            <text x="24" y="70" font-size="13" fill="#344054">집중 룰</text>
+            <rect x="160" y="52" width="220" height="26" rx="4" fill="#d92d4c"/>
+            <text x="392" y="70" font-size="13" fill="#111827">대상 n, 이벤트율 high</text>
+            <text x="24" y="132" font-size="13" fill="#344054">넓은 룰</text>
+            <rect x="160" y="114" width="390" height="26" rx="4" fill="#d98319"/>
+            <text x="562" y="132" font-size="13" fill="#111827">대상 n, 이벤트율 mid</text>
+            <text x="24" y="194" font-size="13" fill="#344054">보조 룰</text>
+            <rect x="160" y="176" width="300" height="26" rx="4" fill="#1d4ed8"/>
+            <text x="472" y="194" font-size="13" fill="#111827">대상 n, 이벤트율 mid</text>
+            <text x="160" y="292" font-size="13" fill="#667085">대상 규모, 이벤트율, 전체 이벤트 커버리지를 함께 비교</text>
+          </svg>
+        </article>
+        <article class="data-table wide">
+          <h2>룰 비교 계약</h2>
+          <p>이 표는 액션 효과 예측이 아니라 관측 데이터 기준의 우선순위 비교다.</p>
+          <table>
+            <thead><tr><th>룰</th><th>대상 수</th><th>이벤트율</th><th>주의</th></tr></thead>
+            <tbody>
+              <tr><td>집중 룰</td><td>—</td><td>—</td><td>표본 내 관측값이며 인과 효과가 아님</td></tr>
+              <tr><td>넓은 룰</td><td>—</td><td>—</td><td>중복 조건이면 커버리지 해석 주의</td></tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+    </section>
+
+    <section id="evidence" class="view">
+      <div class="evidence-grid">
+        <article class="data-table">
+          <h2>지표 계약</h2>
+          <p><code>04_metrics.json</code>에서 읽은 KPI 정의를 그대로 노출한다.</p>
+          <!-- FROM: 04_metrics.json -->
+          <table>
+            <thead>
+              <tr>
+                <th>KPI</th>
+                <th>계산식</th>
+                <th>값</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>핵심 KPI 1</td>
+                <td class="mono">formula</td>
+                <td>—</td>
+                <td>주의</td>
+              </tr>
+              <tr>
+                <td>핵심 KPI 2</td>
+                <td class="mono">formula</td>
+                <td>—</td>
+                <td>조치 필요</td>
+              </tr>
+              <tr>
+                <td>핵심 KPI 3</td>
+                <td class="mono">formula</td>
+                <td>—</td>
+                <td>관찰</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="data-table">
+          <h2>검증 리포트 요약</h2>
+          <p><code>08_validation_report.md</code>가 있으면 핵심 판정을 표시하고, 없으면 stage 7 검증 예정으로 표시한다.</p>
+          <!-- FROM: 08_validation_report.md when available; otherwise mark pending -->
+          <table>
+            <thead>
+              <tr>
+                <th>항목</th>
+                <th>상태</th>
+                <th>비고</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>수치 일관성</td>
+                <td>검증 예정</td>
+                <td>stage 7에서 metrics.json과 HTML KPI 일치 여부 확인</td>
+              </tr>
+              <tr>
+                <td>재현성</td>
+                <td>검증 예정</td>
+                <td>stage 7에서 05_analysis.py 실행과 05_analysis.ipynb 유효성 확인</td>
+              </tr>
+              <tr>
+                <td>해석 리스크</td>
+                <td>주의</td>
+                <td>상관관계, 표본 한계, 누락 변수 등을 명시</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const views = document.querySelectorAll(".view");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const id = tab.dataset.tab;
+        const target = document.getElementById(id);
+        if (!target) return;
+        tabs.forEach((item) => item.classList.toggle("active", item === tab));
+        views.forEach((view) => view.classList.toggle("active", view === target));
+      });
+    });
+
+    const capacity = document.querySelector("#capacity");
+    const capacityLabel = document.querySelector("#capacityLabel");
+    const scenarioValue = document.querySelector("#scenarioValue");
+
+    function updateScenario() {
+      if (!capacity || !capacityLabel || !scenarioValue) return;
+      const selected = Number(capacity.value);
+      capacityLabel.textContent = selected.toLocaleString("ko-KR");
+      scenarioValue.textContent = `${Math.round(selected * 0.4).toLocaleString("ko-KR")}건`;
+    }
+
+    if (capacity) {
+      capacity.addEventListener("input", updateScenario);
+      updateScenario();
+    }
+  </script>
+</body>
+</html>
