@@ -27,8 +27,9 @@ link_shared() {
 
 uninstall_claude() {
   if command -v claude &>/dev/null; then
-    claude plugin uninstall ai-analyst-pipeline 2>/dev/null || true
+    claude plugin marketplace remove ai-analyst-pipeline 2>/dev/null || true
   fi
+  rm -rf "$HOME/.claude/plugins/local/ai-analyst-pipeline"
 }
 
 uninstall_codex() {
@@ -47,26 +48,26 @@ uninstall_gemini()   { rm -rf "$HOME/.gemini/skills/ai-analyst-pipeline"; }
 installed=()
 
 install_claude() {
-  # staging: platforms/claude + shared를 합쳐 self-contained plugin 폴더 구성
-  CLAUDE_STAGING="$(mktemp -d)"
-  cp -r "$REPO_DIR/platforms/claude/." "$CLAUDE_STAGING/"
-  cp -r "$SHARED/scripts"    "$CLAUDE_STAGING/ai-analyst-pipeline/scripts"
-  cp -r "$SHARED/references" "$CLAUDE_STAGING/ai-analyst-pipeline/references"
-  cp -r "$SHARED/assets"     "$CLAUDE_STAGING/ai-analyst-pipeline/assets"
+  # 마켓플레이스를 영구 경로에 복사 (marketplace remove 시 플러그인도 삭제되므로 유지 필요)
+  CLAUDE_LOCAL="$HOME/.claude/plugins/local/ai-analyst-pipeline"
+  rm -rf "$CLAUDE_LOCAL"
+  mkdir -p "$CLAUDE_LOCAL"
+  cp -r "$REPO_DIR/platforms/claude/." "$CLAUDE_LOCAL/"
+  cp -r "$SHARED/scripts"    "$CLAUDE_LOCAL/ai-analyst-pipeline/scripts"
+  cp -r "$SHARED/references" "$CLAUDE_LOCAL/ai-analyst-pipeline/references"
+  cp -r "$SHARED/assets"     "$CLAUDE_LOCAL/ai-analyst-pipeline/assets"
 
   if command -v claude &>/dev/null; then
     claude plugin marketplace remove ai-analyst-pipeline 2>/dev/null || true
-    claude plugin marketplace add "$CLAUDE_STAGING" 2>/dev/null || true
-    claude plugin install ai-analyst-pipeline@ai-analyst-pipeline 2>/dev/null && \
+    claude plugin marketplace add "$CLAUDE_LOCAL" 2>/dev/null || true
+    claude plugin install ai-analyst-pipeline@ai-analyst-pipeline --scope user 2>/dev/null && \
       echo "  → claude plugin 등록 완료" || \
       echo "  → claude plugin install 실패 — 수동 실행: claude plugin install ai-analyst-pipeline@ai-analyst-pipeline"
-    claude plugin marketplace remove ai-analyst-pipeline 2>/dev/null || true
   else
     echo "  → claude 명령어 없음 — Claude Code 설치 후 재실행 필요"
   fi
 
-  rm -rf "$CLAUDE_STAGING"
-  installed+=("Claude Code → ~/.claude/plugins/cache/ai-analyst-pipeline/ai-analyst-pipeline")
+  installed+=("Claude Code → $CLAUDE_LOCAL")
 }
 
 install_codex() {
