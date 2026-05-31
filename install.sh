@@ -4,11 +4,11 @@ set -e
 REPO_URL="https://github.com/OKEUNSOO/ai-analyst-pipeline"
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# curl | bash로 실행 시 platforms/ 없으면 임시 클론
+# curl | bash로 실행 시 platforms/ 없으면 tarball 다운로드
 if [ ! -d "$REPO_DIR/platforms" ]; then
   TMPDIR_CLONE="$(mktemp -d)"
-  echo "원격 실행 감지 — 임시 클론 중..."
-  git clone --depth 1 "$REPO_URL" "$TMPDIR_CLONE" --quiet
+  echo "원격 실행 감지 — 파일 다운로드 중..."
+  curl -sL "$REPO_URL/archive/refs/heads/main.tar.gz" | tar xz -C "$TMPDIR_CLONE" --strip-components=1
   REPO_DIR="$TMPDIR_CLONE"
   CLEANUP=1
 fi
