@@ -39,7 +39,7 @@ uninstall_codex() {
   rm -rf "$HOME/.codex/plugins/ai-analyst-pipeline"
 }
 
-uninstall_hermes()   { rm -rf "$HOME/.hermes/skills/ai-analyst-pipeline"; }
+uninstall_hermes()   { rm -rf "$HOME/.hermes/plugins/ai_analyst_pipeline"; }
 uninstall_openclaw() { rm -rf "$HOME/.openclaw/skills/ai-analyst-pipeline"; }
 uninstall_gemini()   { rm -rf "$HOME/.gemini/skills/ai-analyst-pipeline"; }
 
@@ -121,11 +121,16 @@ PYEOF
 }
 
 install_hermes() {
-  HERMES_SKILL="$HOME/.hermes/skills/ai-analyst-pipeline"
-  mkdir -p "$HERMES_SKILL"
-  cp "$REPO_DIR/platforms/hermes/ai-analyst-pipeline/SKILL.md" "$HERMES_SKILL/SKILL.md"
-  link_shared "$HERMES_SKILL"
-  installed+=("Hermes → $HERMES_SKILL")
+  # Python 플러그인 형태로 설치 (ai_pipeline_* 도구가 hermes tools list에 뜸)
+  HERMES_PLUGIN="$HOME/.hermes/plugins/ai_analyst_pipeline"
+  rm -rf "$HERMES_PLUGIN"
+  mkdir -p "$HERMES_PLUGIN"
+  cp -r "$REPO_DIR/platforms/hermes/ai_analyst_pipeline/." "$HERMES_PLUGIN/"
+  link_shared "$HERMES_PLUGIN"
+  if command -v hermes &>/dev/null; then
+    hermes plugins enable ai-analyst-pipeline 2>/dev/null || true
+  fi
+  installed+=("Hermes → $HERMES_PLUGIN")
 }
 
 install_openclaw() {

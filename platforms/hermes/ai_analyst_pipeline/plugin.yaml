@@ -1,0 +1,16 @@
+name: ai-analyst-pipeline
+version: 1.0.0
+description: 7-stage AI data analysis pipeline — load, clean, EDA, model, visualize, dashboard, report
+author: OKEUNSOO
+kind: standalone
+platforms:
+  - macos
+  - linux
+provides_tools:
+  - ai_pipeline_create_run
+  - ai_pipeline_status
+  - ai_pipeline_workflow_status
+  - ai_pipeline_list_inputs
+  - ai_pipeline_list_outputs
+  - ai_pipeline_read_output
+  - ai_pipeline_write_progress
