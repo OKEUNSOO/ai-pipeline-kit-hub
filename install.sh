@@ -11,24 +11,16 @@ else
   echo "파일 다운로드 중..."
   curl -sL "$REPO_URL/archive/refs/heads/main.tar.gz" | tar xz -C "$TMPDIR_CLONE" --strip-components=1
   REPO_DIR="$TMPDIR_CLONE"
-  CLEANUP=1
+  trap 'rm -rf "$TMPDIR_CLONE"' EXIT
 fi
 
 SHARED="$REPO_DIR/shared"
 
 link_shared() {
   local dest="$1"
-  if [ "${CLEANUP:-0}" = "1" ]; then
-    # 원격 설치: 임시 폴더가 삭제되므로 복사
-    cp -r "$SHARED/scripts"    "$dest/scripts"
-    cp -r "$SHARED/references" "$dest/references"
-    cp -r "$SHARED/assets"     "$dest/assets"
-  else
-    # 로컬 설치: 심링크로 연결
-    ln -sfn "$SHARED/scripts"    "$dest/scripts"
-    ln -sfn "$SHARED/references" "$dest/references"
-    ln -sfn "$SHARED/assets"     "$dest/assets"
-  fi
+  cp -r "$SHARED/scripts"    "$dest/scripts"
+  cp -r "$SHARED/references" "$dest/references"
+  cp -r "$SHARED/assets"     "$dest/assets"
 }
 
 installed=()
@@ -111,4 +103,3 @@ else
   done
 fi
 
-[ "${CLEANUP:-0}" = "1" ] && rm -rf "$TMPDIR_CLONE"
