@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "ai-analyst-pipeline",
+  "version": "1.0.0",
+  "description": "7-stage AI data analysis pipeline: load, clean, EDA, model, visualize, dashboard, report",
+  "owner": {
+    "name": "OKEUNSOO",
+    "url": "https://github.com/OKEUNSOO/ai-analyst-pipeline"
+  },
+  "plugins": [
+    {
+      "name": "ai-analyst-pipeline",
+      "description": "7-stage AI data analysis pipeline skill",
+      "source": "./ai-analyst-pipeline",
+      "category": "data-analytics"
+    }
+  ]
+}

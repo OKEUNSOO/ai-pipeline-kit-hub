@@ -1,0 +1,17 @@
+{
+  "name": "ai-analyst-pipeline",
+  "version": "1.0.0",
+  "description": "7-stage AI data analysis pipeline: load, clean, EDA, model, visualize, dashboard, report",
+  "author": {
+    "name": "OKEUNSOO",
+    "url": "https://github.com/OKEUNSOO/ai-analyst-pipeline"
+  },
+  "keywords": [
+    "data-analysis",
+    "pipeline",
+    "visualization",
+    "dashboard",
+    "analytics"
+  ],
+  "license": "MIT"
+}

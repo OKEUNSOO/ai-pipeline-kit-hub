@@ -3,8 +3,8 @@ set -e
 
 REPO_URL="https://github.com/OKEUNSOO/ai-analyst-pipeline"
 
-# stdin이 TTY면 로컬 실행, 아니면 curl | bash 원격 실행
-if [ -t 0 ]; then
+# BASH_SOURCE[0]가 실제 파일이면 로컬 실행, 아니면 curl | bash 원격 실행
+if [ -f "${BASH_SOURCE[0]:-}" ]; then
   REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 else
   TMPDIR_CLONE="$(mktemp -d)"
@@ -26,7 +26,9 @@ link_shared() {
 # ── uninstall ────────────────────────────────────────────
 
 uninstall_claude() {
-  rm -rf "$HOME/.claude/plugins/ai-analyst-pipeline"
+  if command -v claude &>/dev/null; then
+    claude plugin uninstall ai-analyst-pipeline 2>/dev/null || true
+  fi
 }
 
 uninstall_codex() {
@@ -45,14 +47,26 @@ uninstall_gemini()   { rm -rf "$HOME/.gemini/skills/ai-analyst-pipeline"; }
 installed=()
 
 install_claude() {
-  CLAUDE_SKILLS="$HOME/.claude/plugins/ai-analyst-pipeline/skills"
-  mkdir -p "$CLAUDE_SKILLS"
-  for skill in ai-analyst-pipeline run-pipeline visualize dashboard-design; do
-    mkdir -p "$CLAUDE_SKILLS/$skill"
-    cp "$REPO_DIR/platforms/claude/skills/$skill/SKILL.md" "$CLAUDE_SKILLS/$skill/SKILL.md"
-    link_shared "$CLAUDE_SKILLS/$skill"
-  done
-  installed+=("Claude Code → $CLAUDE_SKILLS")
+  # staging: platforms/claude + shared를 합쳐 self-contained plugin 폴더 구성
+  CLAUDE_STAGING="$(mktemp -d)"
+  cp -r "$REPO_DIR/platforms/claude/." "$CLAUDE_STAGING/"
+  cp -r "$SHARED/scripts"    "$CLAUDE_STAGING/ai-analyst-pipeline/scripts"
+  cp -r "$SHARED/references" "$CLAUDE_STAGING/ai-analyst-pipeline/references"
+  cp -r "$SHARED/assets"     "$CLAUDE_STAGING/ai-analyst-pipeline/assets"
+
+  if command -v claude &>/dev/null; then
+    claude plugin marketplace remove ai-analyst-pipeline 2>/dev/null || true
+    claude plugin marketplace add "$CLAUDE_STAGING" 2>/dev/null || true
+    claude plugin install ai-analyst-pipeline@ai-analyst-pipeline 2>/dev/null && \
+      echo "  → claude plugin 등록 완료" || \
+      echo "  → claude plugin install 실패 — 수동 실행: claude plugin install ai-analyst-pipeline@ai-analyst-pipeline"
+    claude plugin marketplace remove ai-analyst-pipeline 2>/dev/null || true
+  else
+    echo "  → claude 명령어 없음 — Claude Code 설치 후 재실행 필요"
+  fi
+
+  rm -rf "$CLAUDE_STAGING"
+  installed+=("Claude Code → ~/.claude/plugins/cache/ai-analyst-pipeline/ai-analyst-pipeline")
 }
 
 install_codex() {
