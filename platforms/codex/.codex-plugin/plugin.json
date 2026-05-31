@@ -1,5 +1,5 @@
 {
-  "name": "ai-pipeline-kit",
+  "name": "ai-analyst-pipeline",
   "version": "0.1.0",
   "description": "Run-scoped 7-step AI data analysis pipeline for Codex.",
   "author": {
@@ -14,9 +14,9 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "ai-pipeline-kit",
+    "displayName": "ai-analyst-pipeline",
     "shortDescription": "Run a 7-step data analysis pipeline with dashboards and reports.",
-    "longDescription": "ai-pipeline-kit gives Codex a run-scoped workflow for profiling source data, EDA, problem definition, KPI design, deep analysis, SVG/HTML dashboard generation, and executive reporting. It records source file paths without copying data and keeps outputs under ~/Documents/data-ai-pipeline/runs/<run_id>/outputs.",
+    "longDescription": "ai-analyst-pipeline gives Codex a run-scoped workflow for profiling source data, EDA, problem definition, KPI design, deep analysis, SVG/HTML dashboard generation, and executive reporting. It records source file paths without copying data and keeps outputs under ~/Documents/data-ai-pipeline/runs/<run_id>/outputs.",
     "developerName": "OKEUNSOO",
     "category": "Productivity",
     "capabilities": [

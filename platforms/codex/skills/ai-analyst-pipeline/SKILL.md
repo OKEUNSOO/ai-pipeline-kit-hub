@@ -1,9 +1,9 @@
 ---
-name: ai-pipeline-kit
-description: Run-scoped AI data analysis pipeline for Codex. Use when the user asks to analyze CSV/Excel/JSON/TSV/PDF data, create analyst-ready EDA/KPI/reproducible Python/notebook/dashboard/report outputs, handle multiple data files, or manage ai-pipeline-kit runs and outputs.
+name: ai-analyst-pipeline
+description: Run-scoped AI data analysis pipeline for Codex. Use when the user asks to analyze CSV/Excel/JSON/TSV/PDF data, create analyst-ready EDA/KPI/reproducible Python/notebook/dashboard/report outputs, handle multiple data files, or manage ai-analyst-pipeline runs and outputs.
 ---
 
-# ai-pipeline-kit
+# ai-analyst-pipeline
 
 Run a 7-stage, analyst-ready data analysis pipeline and keep every execution under a durable run folder.
 

@@ -1,5 +1,5 @@
 ---
-name: ai-pipeline-kit
+name: ai-analyst-pipeline
 version: "0.1.0"
 description: Run a durable analyst-ready AI data analysis pipeline for CSV, Excel, JSON, TSV, PDF, or text-table datasets. Use when the user asks Codex to analyze data files, run an AI/data-analysis pipeline, handle multiple datasets, create EDA/KPI/metrics JSON/reproducible Python/notebook/dashboard/report outputs, continue or validate an ai-pipeline run, or inspect run-scoped pipeline outputs.
 platforms: [macos, linux, windows]
@@ -66,7 +66,7 @@ python3 scripts/ai_pipeline.py create-run --source-path <file-a> --source-path <
    - `source_files[].path`
 5. Use those values for every stage in the same run.
 
-If no file path is provided, ask for the path and stop. Example: `Use $ai-pipeline-kit to analyze /Users/eunsu/Desktop/sales.csv.`
+If no file path is provided, ask for the path and stop. Example: `Use $ai-analyst-pipeline to analyze /Users/eunsu/Desktop/sales.csv.`
 
 ## Stage Order
 

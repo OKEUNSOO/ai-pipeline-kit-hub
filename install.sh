@@ -26,9 +26,9 @@ link_shared() {
 installed=()
 
 install_claude() {
-  CLAUDE_SKILLS="$HOME/.claude/plugins/ai-pipeline-kit/skills"
+  CLAUDE_SKILLS="$HOME/.claude/plugins/ai-analyst-pipeline/skills"
   mkdir -p "$CLAUDE_SKILLS"
-  for skill in ai-pipeline-kit run-pipeline visualize dashboard-design; do
+  for skill in ai-analyst-pipeline run-pipeline visualize dashboard-design; do
     mkdir -p "$CLAUDE_SKILLS/$skill"
     cp "$REPO_DIR/platforms/claude/skills/$skill/SKILL.md" "$CLAUDE_SKILLS/$skill/SKILL.md"
     link_shared "$CLAUDE_SKILLS/$skill"
@@ -37,7 +37,7 @@ install_claude() {
 }
 
 install_codex() {
-  CODEX_PLUGIN="$HOME/.codex/plugins/ai-pipeline-kit"
+  CODEX_PLUGIN="$HOME/.codex/plugins/ai-analyst-pipeline"
   mkdir -p "$CODEX_PLUGIN"
   cp -r "$REPO_DIR/platforms/codex/." "$CODEX_PLUGIN/"
   link_shared "$CODEX_PLUGIN"
@@ -51,16 +51,16 @@ import sys, json, os
 marketplace_path = sys.argv[1]
 
 data = {
-    "name": "ai-pipeline-local",
+    "name": "ai-analyst-local",
     "interface": {
         "displayName": "AI Pipeline Local"
     },
     "plugins": [
         {
-            "name": "ai-pipeline-kit",
+            "name": "ai-analyst-pipeline",
             "source": {
                 "source": "local",
-                "path": "./.codex/plugins/ai-pipeline-kit"
+                "path": "./.codex/plugins/ai-analyst-pipeline"
             },
             "policy": {
                 "installation": "AVAILABLE",
@@ -77,36 +77,36 @@ PYEOF
 
   # Codex에 플러그인 등록
   if command -v codex &>/dev/null; then
-    codex plugin add ai-pipeline-kit --marketplace ai-pipeline-local 2>/dev/null && \
+    codex plugin add ai-analyst-pipeline --marketplace ai-analyst-local 2>/dev/null && \
       echo "  → codex plugin 등록 완료" || \
-      echo "  → codex plugin add 실패 — 수동으로 실행하세요: codex plugin add ai-pipeline-kit --marketplace ai-pipeline-local"
+      echo "  → codex plugin add 실패 — 수동으로 실행하세요: codex plugin add ai-analyst-pipeline --marketplace ai-analyst-local"
   else
-    echo "  → codex 명령어 없음 — Codex 실행 후 수동 등록: codex plugin add ai-pipeline-kit --marketplace ai-pipeline-local"
+    echo "  → codex 명령어 없음 — Codex 실행 후 수동 등록: codex plugin add ai-analyst-pipeline --marketplace ai-analyst-local"
   fi
 
   installed+=("Codex → $CODEX_PLUGIN")
 }
 
 install_hermes() {
-  HERMES_SKILL="$HOME/.hermes/skills/ai-pipeline-kit"
+  HERMES_SKILL="$HOME/.hermes/skills/ai-analyst-pipeline"
   mkdir -p "$HERMES_SKILL"
-  cp "$REPO_DIR/platforms/hermes/ai-pipeline-kit/SKILL.md" "$HERMES_SKILL/SKILL.md"
+  cp "$REPO_DIR/platforms/hermes/ai-analyst-pipeline/SKILL.md" "$HERMES_SKILL/SKILL.md"
   link_shared "$HERMES_SKILL"
   installed+=("Hermes → $HERMES_SKILL")
 }
 
 install_openclaw() {
-  OPENCLAW_SKILL="$HOME/.openclaw/skills/ai-pipeline-kit"
+  OPENCLAW_SKILL="$HOME/.openclaw/skills/ai-analyst-pipeline"
   mkdir -p "$OPENCLAW_SKILL"
-  cp "$REPO_DIR/platforms/openclaw/ai-pipeline-kit/SKILL.md" "$OPENCLAW_SKILL/SKILL.md"
+  cp "$REPO_DIR/platforms/openclaw/ai-analyst-pipeline/SKILL.md" "$OPENCLAW_SKILL/SKILL.md"
   link_shared "$OPENCLAW_SKILL"
   installed+=("OpenClaw → $OPENCLAW_SKILL")
 }
 
 install_gemini() {
-  GEMINI_SKILL="$HOME/.gemini/skills/ai-pipeline-kit"
+  GEMINI_SKILL="$HOME/.gemini/skills/ai-analyst-pipeline"
   mkdir -p "$GEMINI_SKILL"
-  cp "$REPO_DIR/platforms/gemini/ai-pipeline-kit/SKILL.md" "$GEMINI_SKILL/SKILL.md"
+  cp "$REPO_DIR/platforms/gemini/ai-analyst-pipeline/SKILL.md" "$GEMINI_SKILL/SKILL.md"
   link_shared "$GEMINI_SKILL"
   installed+=("Gemini CLI → $GEMINI_SKILL")
 }
