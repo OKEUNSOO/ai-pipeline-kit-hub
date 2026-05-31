@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from plugins.ai_analyst_pipeline.cli import register_cli, ai_pipeline_command
+from plugins.ai_analyst_pipeline.cli import handle_slash
 from plugins.ai_analyst_pipeline.tools import (
     AI_PIPELINE_CREATE_RUN_SCHEMA, handle_create_run,
     AI_PIPELINE_STATUS_SCHEMA, handle_status,
@@ -32,10 +32,8 @@ def register(ctx) -> None:
             emoji=emoji,
         )
 
-    ctx.register_cli_command(
-        name="ai-pipeline",
-        help="AI data analysis pipeline (run, status, workflow, inputs, outputs, read)",
-        setup_fn=register_cli,
-        handler_fn=ai_pipeline_command,
-        description="7-stage AI data analysis pipeline — create runs, track progress, read outputs.",
+    ctx.register_command(
+        "ai-pipeline",
+        handler=handle_slash,
+        description="7-stage AI data analysis pipeline — run, status, workflow, inputs, outputs, read.",
     )
