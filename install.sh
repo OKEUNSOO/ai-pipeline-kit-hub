@@ -41,6 +41,35 @@ install_codex() {
   mkdir -p "$CODEX_PLUGIN"
   cp -r "$REPO_DIR/platforms/codex/." "$CODEX_PLUGIN/"
   link_shared "$CODEX_PLUGIN"
+
+  # marketplace.json에 플러그인 등록
+  MARKETPLACE="$HOME/.agents/plugins/marketplace.json"
+  mkdir -p "$(dirname "$MARKETPLACE")"
+  python3 - "$MARKETPLACE" "$CODEX_PLUGIN" <<'PYEOF'
+import sys, json, os
+
+marketplace_path = sys.argv[1]
+plugin_path = sys.argv[2]
+
+if os.path.exists(marketplace_path):
+    with open(marketplace_path) as f:
+        data = json.load(f)
+else:
+    data = {"plugins": []}
+
+plugins = data.get("plugins", [])
+plugins = [p for p in plugins if p.get("name") != "ai-pipeline-kit"]
+plugins.append({
+    "name": "ai-pipeline-kit",
+    "enabled": True,
+    "source": {"type": "local", "path": plugin_path}
+})
+data["plugins"] = plugins
+
+with open(marketplace_path, "w") as f:
+    json.dump(data, f, indent=2)
+PYEOF
+
   installed+=("Codex → $CODEX_PLUGIN")
 }
 
