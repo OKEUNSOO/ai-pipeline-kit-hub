@@ -4,105 +4,111 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AI Pipeline Kit - Analyst Decision Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #eef2f7;
-      --surface: #ffffff;
-      --surface-soft: #f9fafb;
-      --ink: #111827;
-      --muted: #667085;
-      --line: #cfd8e3;
-      --line-soft: #e7ecf2;
-      --blue: #1d4ed8;
-      --blue-soft: #eff6ff;
-      --green: #16a36d;
-      --green-soft: #edfff7;
-      --red: #d92d4c;
-      --red-soft: #fff1f3;
-      --amber: #d98319;
-      --amber-soft: #fff7e6;
-      --teal: #087f8c;
-      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.06);
-      --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.06);
+      --bg-base:        #060b14;
+      --bg-surface:     rgba(255,255,255,0.035);
+      --bg-surface-2:   rgba(255,255,255,0.06);
+      --bg-surface-3:   rgba(255,255,255,0.09);
+      --border:         rgba(255,255,255,0.08);
+      --border-strong:  rgba(255,255,255,0.16);
+
+      --text-primary:   #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted:     #475569;
+
+      --blue:           #3b82f6;
+      --blue-dim:       rgba(59,130,246,0.15);
+      --blue-glow:      rgba(59,130,246,0.35);
+      --green:          #10b981;
+      --green-dim:      rgba(16,185,129,0.12);
+      --green-glow:     rgba(16,185,129,0.35);
+      --red:            #f43f5e;
+      --red-dim:        rgba(244,63,94,0.12);
+      --red-glow:       rgba(244,63,94,0.35);
+      --amber:          #f59e0b;
+      --amber-dim:      rgba(245,158,11,0.12);
+      --amber-glow:     rgba(245,158,11,0.35);
+
+      --radius:         10px;
+      --radius-sm:      7px;
+      --font-display:   'Syne', sans-serif;
+      --font-body:      'IBM Plex Sans', sans-serif;
+      --font-mono:      'IBM Plex Mono', monospace;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-      line-height: 1.45;
-      word-break: keep-all;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    svg {
-      display: block;
-      width: 100%;
-      height: auto;
-      max-height: none;
-      overflow: visible;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+      background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
     }
 
     .dashboard {
-      width: min(1480px, calc(100vw - 32px));
+      width: min(1520px, calc(100vw - 32px));
       margin: 0 auto;
-      padding: 18px 0 48px;
+      padding: 20px 0 60px;
     }
 
+    /* ── header ── */
     .workspace-header {
-      min-height: 52px;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 16px;
+      grid-template-columns: 1fr auto;
       align-items: center;
-      margin-bottom: 14px;
-      padding: 10px 14px;
-      background: #111827;
-      color: #f8fafc;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
+      gap: 16px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: rgba(6,11,20,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       min-width: 0;
     }
 
     .brand-mark {
-      width: 30px;
-      height: 30px;
+      width: 34px;
+      height: 34px;
       display: grid;
       place-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.24);
       border-radius: 8px;
-      background: #1f2937;
+      background: linear-gradient(135deg, var(--blue) 0%, #6366f1 100%);
+      font-family: var(--font-display);
+      font-size: 13px;
       font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 0 16px var(--blue-glow);
     }
 
     .brand strong {
       display: block;
+      font-family: var(--font-display);
       font-size: 14px;
-    }
-
-    .brand > div:last-child {
-      min-width: 0;
+      font-weight: 700;
+      color: var(--text-primary);
     }
 
     .brand span {
       display: block;
-      color: #cbd5e1;
-      font-size: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -110,579 +116,569 @@
 
     .toolbar {
       display: flex;
+      gap: 8px;
       flex-wrap: wrap;
       justify-content: flex-end;
-      gap: 8px;
     }
 
     .tool {
-      min-height: 32px;
-      padding: 0 10px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.08);
-      color: #f8fafc;
-      font-size: 12px;
-      font-weight: 700;
+      height: 30px;
+      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
       cursor: default;
+      transition: border-color .2s, background .2s;
     }
 
-    .tool.primary {
-      background: #f8fafc;
-      color: #111827;
-    }
+    .tool:hover { border-color: var(--border-strong); background: var(--bg-surface-2); }
+    .tool.primary { border-color: var(--amber); background: var(--amber-dim); color: var(--amber); }
 
+    /* ── topbar ── */
     .topbar {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 16px;
-      align-items: stretch;
-      margin-bottom: 16px;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 14px;
+      margin-bottom: 14px;
     }
 
-    .hero,
-    .panel,
-    .kpi,
-    .chart,
-    .action,
-    .data-table {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      box-shadow: var(--shadow);
+    /* ── card base ── */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: border-color .25s;
     }
+    .card:hover { border-color: var(--border-strong); }
 
+    /* ── hero ── */
     .hero {
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 20px;
+      align-items: start;
       position: relative;
       overflow: hidden;
-      padding: 24px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 18px;
     }
 
-    .hero::after {
-      content: "";
+    .hero::before {
+      content: '';
       position: absolute;
-      inset: 0;
+      top: -60px; left: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
       pointer-events: none;
-      border-radius: 8px;
-      box-shadow: inset 0 0 0 4px rgba(29, 78, 216, 0.04);
     }
 
     .eyebrow {
-      margin: 0 0 8px;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--blue);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
     }
 
     h1 {
-      margin: 0 0 10px;
-      max-width: 760px;
-      font-size: 40px;
-      line-height: 1.08;
-      letter-spacing: 0;
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      max-width: 600px;
     }
 
     .hero-copy {
-      margin: 0;
-      max-width: 760px;
-      color: #344054;
-      font-size: 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      max-width: 580px;
+      line-height: 1.6;
     }
 
     .hero-badges {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 16px;
-    }
-
-    .badge,
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      border: 1px solid var(--line-soft);
-      border-radius: 999px;
-      background: #f8fafc;
-      color: #344054;
-      font-size: 12px;
-      font-weight: 700;
-      white-space: nowrap;
+      margin-top: 18px;
     }
 
     .badge {
-      min-height: 28px;
-      padding: 5px 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      border: 1px solid transparent;
     }
 
-    .chip {
-      min-height: 24px;
-      padding: 3px 8px;
-    }
+    .badge.blue   { background: var(--blue-dim);  border-color: rgba(59,130,246,0.3);  color: #93c5fd; }
+    .badge.red    { background: var(--red-dim);   border-color: rgba(244,63,94,0.3);   color: #fda4af; }
+    .badge.green  { background: var(--green-dim); border-color: rgba(16,185,129,0.3);  color: #6ee7b7; }
+    .badge.amber  { background: var(--amber-dim); border-color: rgba(245,158,11,0.3);  color: #fcd34d; }
 
-    .badge.red,
-    .chip.red {
-      border-color: #f3bcc6;
-      background: var(--red-soft);
-      color: #9f1239;
-    }
-
-    .badge.green,
-    .chip.green {
-      border-color: #b9e9d4;
-      background: var(--green-soft);
-      color: #087443;
-    }
-
-    .badge.blue,
-    .chip.blue {
-      border-color: #bfd4ff;
-      background: var(--blue-soft);
-      color: #123c8c;
-    }
-
-    .badge.amber,
-    .chip.amber {
-      border-color: #f5d49b;
-      background: var(--amber-soft);
-      color: #92400e;
-    }
-
+    /* ── verdict ── */
     .verdict {
-      width: 248px;
-      align-self: stretch;
+      padding: 18px;
+      border: 1px solid rgba(59,130,246,0.25);
+      border-radius: var(--radius);
+      background: linear-gradient(160deg, rgba(59,130,246,0.08) 0%, rgba(99,102,241,0.04) 100%);
       display: grid;
       gap: 10px;
       align-content: center;
-      padding: 16px;
-      border: 1px solid #dbe5f3;
-      border-radius: 8px;
-      background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
-      box-shadow: var(--shadow-soft);
     }
 
-    .verdict b {
-      display: block;
+    .verdict-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
       color: var(--blue);
-      font-size: 14px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
     }
 
-    .verdict strong {
-      display: block;
-      font-size: 22px;
-      letter-spacing: 0;
+    .verdict-value {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
     }
 
-    .verdict span,
-    .verdict em {
-      display: block;
-      color: var(--muted);
+    .verdict-desc {
       font-size: 12px;
-      font-style: normal;
+      color: var(--text-secondary);
     }
 
-    .panel {
-      padding: 18px;
+    .verdict-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--green);
     }
 
-    .panel h2,
-    .chart h2,
-    .data-table h2,
-    .action h2 {
-      margin: 0 0 6px;
-      font-size: 18px;
-      letter-spacing: 0;
+    .verdict-action::before { content: '→'; }
+
+    /* ── validation panel ── */
+    .val-panel { padding: 20px; }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
     }
 
-    .panel p,
-    .chart p,
-    .data-table p,
-    .action p {
-      margin: 0 0 14px;
-      color: var(--muted);
-      font-size: 13px;
+    .panel-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
     }
 
     .run-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
 
     .run-item {
-      min-height: 82px;
       padding: 12px;
-      border: 1px solid var(--line-soft);
-      border-radius: 8px;
-      background: var(--surface-soft);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-surface-2);
+      position: relative;
+      overflow: hidden;
     }
 
-    .run-item b,
-    .run-item span {
-      display: block;
+    .run-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--text-muted);
+      border-radius: 3px 0 0 3px;
     }
+
+    .run-item.pass::before { background: var(--green); }
+    .run-item.warn::before { background: var(--amber); }
 
     .run-item b {
-      margin-bottom: 8px;
-      font-size: 13px;
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
     }
 
     .run-item span {
-      color: var(--muted);
-      font-size: 12px;
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
     }
 
-    .run-item.pass {
-      border-color: #b9e9d4;
-      background: var(--green-soft);
-    }
-
-    .run-item.warn {
-      border-color: #f5d49b;
-      background: var(--amber-soft);
-    }
-
+    /* ── tabs ── */
     .tabs {
       position: sticky;
       top: 0;
-      z-index: 4;
+      z-index: 10;
       display: flex;
-      gap: 6px;
-      margin: 0 0 16px;
-      padding: 7px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.94);
-      box-shadow: var(--shadow-soft);
-      overflow-x: auto;
+      gap: 4px;
+      padding: 6px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(6,11,20,0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
     .tab {
-      min-height: 36px;
-      padding: 0 14px;
-      border: 0;
-      border-radius: 8px;
+      height: 34px;
+      padding: 0 16px;
+      border: none;
+      border-radius: var(--radius-sm);
       background: transparent;
-      color: #344054;
+      color: var(--text-muted);
+      font-family: var(--font-display);
       font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0;
-      white-space: nowrap;
+      font-weight: 700;
       cursor: pointer;
+      transition: color .2s, background .2s;
+      white-space: nowrap;
     }
+
+    .tab:hover { color: var(--text-secondary); background: var(--bg-surface-2); }
 
     .tab.active {
-      background: #111827;
-      color: #ffffff;
+      background: var(--bg-surface-3);
+      color: var(--text-primary);
+      border: 1px solid var(--border-strong);
     }
 
-    .view {
-      display: none;
-    }
+    .view { display: none; }
+    .view.active { display: block; }
 
-    .view.active {
-      display: block;
-    }
-
+    /* ── kpi row ── */
     .kpi-row {
       display: grid;
-      grid-template-columns: repeat(4, minmax(190px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .kpi {
-      min-height: 178px;
-      padding: 16px;
-      display: grid;
-      align-content: space-between;
-      gap: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
     }
+
+    .kpi::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 20px; right: 20px;
+      height: 1px;
+      opacity: .6;
+    }
+
+    .kpi.blue::after  { background: linear-gradient(90deg, transparent, var(--blue), transparent); }
+    .kpi.red::after   { background: linear-gradient(90deg, transparent, var(--red), transparent); }
+    .kpi.green::after { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+    .kpi.amber::after { background: linear-gradient(90deg, transparent, var(--amber), transparent); }
 
     .kpi-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      min-height: 20px;
-      color: #344054;
-      font-size: 13px;
-      font-weight: 800;
     }
 
-    .dot {
-      width: 10px;
-      height: 10px;
-      flex: 0 0 auto;
-      border-radius: 999px;
-      background: var(--blue);
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: .02em;
     }
 
-    .dot.red {
-      background: var(--red);
+    .kpi-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
     }
 
-    .dot.green {
-      background: var(--green);
-    }
-
-    .dot.amber {
-      background: var(--amber);
-    }
+    .kpi.blue  .kpi-dot { background: var(--blue);  box-shadow: 0 0 8px var(--blue-glow); }
+    .kpi.red   .kpi-dot { background: var(--red);   box-shadow: 0 0 8px var(--red-glow); }
+    .kpi.green .kpi-dot { background: var(--green); box-shadow: 0 0 8px var(--green-glow); }
+    .kpi.amber .kpi-dot { background: var(--amber); box-shadow: 0 0 8px var(--amber-glow); }
 
     .kpi-value {
-      color: #0a0a0a;
-      font-size: 36px;
-      font-weight: 800;
-      letter-spacing: 0;
+      font-family: var(--font-mono);
+      font-size: 42px;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--text-primary);
     }
 
-    .kpi-note,
-    .kpi-foot {
-      color: var(--muted);
-      font-size: 13px;
+    .kpi.blue  .kpi-value { color: #93c5fd; }
+    .kpi.red   .kpi-value { color: #fda4af; }
+    .kpi.green .kpi-value { color: #6ee7b7; }
+    .kpi.amber .kpi-value { color: #fcd34d; }
+
+    .kpi-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
     }
 
     .kpi-chips {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
+      margin-top: auto;
     }
 
-    .content-grid,
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      height: 20px;
+      padding: 0 8px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+
+    .chip.blue    { background: var(--blue-dim);  border-color: rgba(59,130,246,0.25);  color: #93c5fd; }
+    .chip.red     { background: var(--red-dim);   border-color: rgba(244,63,94,0.25);   color: #fda4af; }
+    .chip.green   { background: var(--green-dim); border-color: rgba(16,185,129,0.25);  color: #6ee7b7; }
+    .chip.amber   { background: var(--amber-dim); border-color: rgba(245,158,11,0.25);  color: #fcd34d; }
+    .chip.neutral { background: var(--bg-surface-2); border-color: var(--border); color: var(--text-muted); }
+
+    /* ── grids ── */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 0.6fr;
+      gap: 14px;
+    }
+
+    .drivers-grid, .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
     .scenario {
       display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
-      gap: 16px;
-      align-items: stretch;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items: start;
     }
 
-    .drivers-grid,
-    .evidence-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+    /* ── chart / table / action cards ── */
+    .chart, .data-table, .action { padding: 22px; }
+    .chart.wide, .action.wide, .data-table.wide { grid-column: 1 / -1; }
+
+    .chart-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
     }
 
-    .chart,
-    .data-table,
-    .action {
-      padding: 18px;
-      overflow: hidden;
+    .chart-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
     }
 
-    .chart.wide,
-    .action.wide,
-    .data-table.wide {
-      grid-column: 1 / -1;
-    }
+    svg { display: block; width: 100%; height: auto; overflow: visible; }
 
-    .story-list {
-      display: grid;
-      gap: 10px;
-    }
+    /* ── story list ── */
+    .story-list { display: grid; gap: 8px; }
 
     .story-row {
       display: grid;
-      grid-template-columns: 56px minmax(0, 1fr);
+      grid-template-columns: 56px 1fr;
       gap: 10px;
-      align-items: start;
-      padding: 10px;
-      border: 1px solid var(--line-soft);
-      border-radius: 8px;
-      background: var(--surface-soft);
+      align-items: center;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-surface-2);
     }
 
     .story-row b {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
       color: var(--blue);
-      font-size: 13px;
+      letter-spacing: .04em;
     }
 
-    .story-row span {
-      color: #344054;
-      font-size: 13px;
-    }
+    .story-row span { font-size: 13px; color: var(--text-secondary); }
 
+    /* ── legend ── */
     .legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 12px;
+      gap: 14px;
+      margin-top: 12px;
     }
 
     .legend span {
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
     }
 
-    .legend i {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-    }
+    .legend i { width: 8px; height: 8px; border-radius: 50%; }
 
+    /* ── scenario slider ── */
     .slider-panel {
-      min-height: 330px;
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #111827;
-      color: #f8fafc;
-      box-shadow: var(--shadow);
+      padding: 24px;
+      border: 1px solid rgba(59,130,246,0.2);
+      border-radius: var(--radius);
+      background: linear-gradient(160deg, rgba(59,130,246,0.06) 0%, rgba(6,11,20,0.9) 100%);
     }
 
-    .slider-panel p {
-      color: #cbd5e1;
-      font-size: 13px;
-    }
-
-    .slider-panel label {
+    .slider-label {
       display: block;
-      margin: 18px 0 8px;
-      color: #e5e7eb;
-      font-size: 13px;
-      font-weight: 800;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin: 20px 0 8px;
     }
 
-    .slider-panel input[type="range"] {
-      width: 100%;
-      accent-color: #60a5fa;
-    }
+    .slider-label span { color: var(--blue); }
+
+    input[type="range"] { width: 100%; accent-color: var(--blue); cursor: pointer; }
 
     .scenario-number {
-      margin-top: 18px;
-      padding: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.08);
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface-2);
     }
 
-    .scenario-number b,
+    .scenario-number b {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
     .scenario-number strong {
       display: block;
+      font-family: var(--font-mono);
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--blue);
     }
 
-    .scenario-number strong {
-      margin-top: 4px;
-      color: #ffffff;
-      font-size: 32px;
-      letter-spacing: 0;
+    .scenario-number span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-      font-size: 13px;
-    }
+    /* ── tables ── */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
 
-    th,
-    td {
-      padding: 10px 8px;
-      border-bottom: 1px solid var(--line-soft);
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
       text-align: left;
       vertical-align: top;
-      overflow-wrap: anywhere;
     }
 
     th {
-      color: #344054;
-      font-weight: 800;
-      background: var(--surface-soft);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: var(--bg-surface-2);
     }
 
-    .mono {
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    td { color: var(--text-secondary); }
+    .mono { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+
+    /* ── status pill ── */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      height: 20px;
+      padding: 0 8px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
     }
 
+    .status::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .status.warn    { background: var(--amber-dim); color: var(--amber); }
+    .status.danger  { background: var(--red-dim);   color: var(--red); }
+    .status.ok      { background: var(--green-dim); color: var(--green); }
+    .status.pending { background: var(--bg-surface-2); color: var(--text-muted); }
+
+    /* ── responsive ── */
     @media (max-width: 1180px) {
-      .topbar,
-      .content-grid,
-      .scenario {
-        grid-template-columns: 1fr;
-      }
-
-      .kpi-row {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .verdict {
-        width: auto;
-      }
+      .topbar, .content-grid, .scenario { grid-template-columns: 1fr; }
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .hero { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 780px) {
-      .dashboard {
-        width: min(100vw - 20px, 720px);
-        padding-top: 10px;
-      }
-
-      .workspace-header,
-      .hero,
-      .drivers-grid,
-      .evidence-grid,
-      .kpi-row {
-        grid-template-columns: 1fr;
-      }
-
-      .workspace-header {
-        align-items: start;
-      }
-
-      .toolbar {
-        justify-content: flex-start;
-      }
-
-      h1 {
-        font-size: 32px;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .dashboard {
-        width: calc(100vw - 14px);
-      }
-
-      .workspace-header,
-      .hero,
-      .panel,
-      .chart,
-      .data-table,
-      .kpi {
-        padding: 12px;
-      }
-
-      .tool {
-        min-height: 30px;
-        padding: 0 8px;
-      }
-
-      h1 {
-        font-size: 28px;
-      }
-
-      .kpi-value {
-        font-size: 32px;
-      }
-
-      .tabs {
-        top: 0;
-      }
+    @media (max-width: 760px) {
+      .dashboard { width: calc(100vw - 16px); }
+      .kpi-row { grid-template-columns: 1fr 1fr; }
+      .drivers-grid, .evidence-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 24px; }
+      .kpi-value { font-size: 32px; }
+      .workspace-header { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <main class="dashboard">
+
     <header class="workspace-header">
       <div class="brand">
-        <div class="brand-mark" aria-hidden="true">AI</div>
+        <div class="brand-mark">AI</div>
         <div>
           <strong>AI Pipeline Kit</strong>
           <!-- FROM: run.json, 00_data_contract.md -->
@@ -697,7 +693,7 @@
     </header>
 
     <section class="topbar" aria-label="핵심 요약">
-      <div class="hero">
+      <div class="card hero">
         <div>
           <p class="eyebrow">Analyst Decision Dashboard</p>
           <!-- FROM: 03_problem_definition.md, 05_analysis_report.md -->
@@ -712,38 +708,22 @@
         </div>
         <aside class="verdict" aria-label="최종 판정">
           <!-- FROM: 07_executive_report.md -->
-          <b>최종 판정</b>
-          <strong>의사결정 문장</strong>
-          <span>핵심 KPI가 어떤 상태인지 짧게 설명한다.</span>
-          <em>이번 주 액션: 실행 과제 1개</em>
+          <div class="verdict-label">최종 판정</div>
+          <div class="verdict-value">의사결정 문장</div>
+          <div class="verdict-desc">핵심 KPI가 어떤 상태인지 짧게 설명한다.</div>
+          <div class="verdict-action">이번 주 액션: 실행 과제 1개</div>
         </aside>
       </div>
 
-      <aside class="panel">
-        <h2>검증 상태</h2>
-        <p>대시보드에 표시된 값은 아래 산출물과 맞아야 한다.</p>
+      <aside class="card val-panel">
+        <div class="panel-title">검증 상태</div>
+        <div class="panel-sub">대시보드에 표시된 값은 아래 산출물과 맞아야 한다.</div>
         <div class="run-grid">
-          <div class="run-item pass">
-            <b>metrics.json</b>
-            <span>핵심 KPI 값과 단위 확인</span>
-          </div>
-          <div class="run-item pass">
-            <b>analysis.py</b>
-            <span>재현 가능한 계산 코드 확인</span>
-          </div>
-          <div class="run-item pass">
-            <b>analysis.ipynb</b>
-            <span>분석가용 노트북 생성 확인</span>
-          </div>
-          <div class="run-item warn">
-            <b>데이터 품질</b>
-            <span>결측, 중복, 표본 제한 사항</span>
-          </div>
-          <div class="run-item">
-            <b>Run ID</b>
-            <!-- FROM: run.json -->
-            <span class="mono">run_id</span>
-          </div>
+          <div class="run-item pass"><b>metrics.json</b><span>핵심 KPI 값과 단위 확인</span></div>
+          <div class="run-item pass"><b>analysis.py</b><span>재현 가능한 계산 코드 확인</span></div>
+          <div class="run-item pass"><b>analysis.ipynb</b><span>분석가용 노트북 생성 확인</span></div>
+          <div class="run-item warn"><b>데이터 품질</b><span>결측, 중복, 표본 제한</span></div>
+          <div class="run-item"><b>Run ID</b><!-- FROM: run.json --><span class="mono">run_id</span></div>
         </div>
       </aside>
     </section>
@@ -755,72 +735,84 @@
       <button class="tab" type="button" data-tab="evidence">Evidence</button>
     </nav>
 
+    <!-- OVERVIEW -->
     <section id="overview" class="view active">
       <div class="kpi-row">
-        <article class="kpi">
-          <!-- FROM: 04_metrics.json -->
-          <div class="kpi-head"><span>핵심 KPI 1</span><i class="dot amber" aria-hidden="true"></i></div>
+        <!-- FROM: 04_metrics.json -->
+        <article class="card kpi amber">
+          <div class="kpi-head"><div class="kpi-label">핵심 KPI 1</div><div class="kpi-dot"></div></div>
           <div class="kpi-value">—</div>
           <div class="kpi-note">분자/분모 또는 계산 기준</div>
-          <div class="kpi-foot">baseline: 비교 기준</div>
-          <div class="kpi-chips"><span class="chip amber">주의</span><span class="chip">n=sample</span></div>
+          <div class="kpi-chips"><span class="chip amber">주의</span><span class="chip neutral">n=sample</span></div>
         </article>
-        <article class="kpi">
-          <div class="kpi-head"><span>핵심 KPI 2</span><i class="dot red" aria-hidden="true"></i></div>
+        <article class="card kpi red">
+          <div class="kpi-head"><div class="kpi-label">핵심 KPI 2</div><div class="kpi-dot"></div></div>
           <div class="kpi-value">—</div>
           <div class="kpi-note">가장 중요한 위험 또는 기회 지표</div>
-          <div class="kpi-foot">segment: 주요 세그먼트</div>
           <div class="kpi-chips"><span class="chip red">조치 필요</span><span class="chip blue">gap</span></div>
         </article>
-        <article class="kpi">
-          <div class="kpi-head"><span>핵심 KPI 3</span><i class="dot blue" aria-hidden="true"></i></div>
+        <article class="card kpi blue">
+          <div class="kpi-head"><div class="kpi-label">핵심 KPI 3</div><div class="kpi-dot"></div></div>
           <div class="kpi-value">—</div>
           <div class="kpi-note">비교 또는 증감 설명</div>
-          <div class="kpi-foot">unit: 단위</div>
-          <div class="kpi-chips"><span class="chip blue">관찰</span><span class="chip">metric</span></div>
+          <div class="kpi-chips"><span class="chip blue">관찰</span><span class="chip neutral">metric</span></div>
         </article>
-        <article class="kpi">
-          <div class="kpi-head"><span>핵심 KPI 4</span><i class="dot green" aria-hidden="true"></i></div>
+        <article class="card kpi green">
+          <div class="kpi-head"><div class="kpi-label">핵심 KPI 4</div><div class="kpi-dot"></div></div>
           <div class="kpi-value">—</div>
           <div class="kpi-note">개선 가능성 또는 안정 구간</div>
-          <div class="kpi-foot">confidence: 근거 수준</div>
-          <div class="kpi-chips"><span class="chip green">기회</span><span class="chip">actionable</span></div>
+          <div class="kpi-chips"><span class="chip green">기회</span><span class="chip neutral">actionable</span></div>
         </article>
       </div>
 
       <div class="content-grid">
-        <article class="chart">
-          <h2>어떤 세그먼트가 전체 결과를 가장 크게 움직이는가?</h2>
-          <p>핵심 KPI의 세그먼트별 차이를 정렬된 막대 차트로 보여준다.</p>
+        <article class="card chart">
+          <div class="chart-title">어떤 세그먼트가 전체 결과를 가장 크게 움직이는가?</div>
+          <div class="chart-sub">핵심 KPI의 세그먼트별 차이를 정렬된 막대 차트로 보여준다.</div>
           <!-- FROM: 04_metrics.json, 05_analysis_report.md -->
-          <svg viewBox="0 0 720 300" role="img" aria-label="세그먼트별 핵심 KPI 비교">
-            <line x1="130" y1="248" x2="680" y2="248" stroke="#d9e0ea" stroke-width="1"/>
-            <text x="130" y="272" font-size="12" fill="#667085">0</text>
-            <text x="356" y="272" font-size="12" fill="#667085">중간값</text>
-            <text x="620" y="272" font-size="12" fill="#667085">최대값</text>
+          <svg viewBox="0 0 720 260" role="img" aria-label="세그먼트별 핵심 KPI 비교">
+            <defs>
+              <linearGradient id="barA" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f43f5e"/><stop offset="100%" stop-color="#fb7185"/>
+              </linearGradient>
+              <linearGradient id="barB" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#fbbf24"/>
+              </linearGradient>
+              <linearGradient id="barC" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#34d399"/>
+              </linearGradient>
+            </defs>
+            <line x1="140" y1="20"  x2="140" y2="210" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="300" y1="20"  x2="300" y2="210" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="460" y1="20"  x2="460" y2="210" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="620" y1="20"  x2="620" y2="210" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="140" y1="210" x2="680" y2="210" stroke="rgba(255,255,255,0.1)"  stroke-width="1"/>
+            <text x="140" y="232" font-size="11" fill="#475569" font-family="'IBM Plex Mono',monospace">0</text>
+            <text x="350" y="232" font-size="11" fill="#475569" font-family="'IBM Plex Mono',monospace">중간값</text>
+            <text x="580" y="232" font-size="11" fill="#475569" font-family="'IBM Plex Mono',monospace">최대값</text>
             <g>
-              <text x="20" y="70" font-size="14" fill="#344054">세그먼트 A</text>
-              <rect x="130" y="48" width="470" height="28" rx="4" fill="#d92d4c"/>
-              <text x="614" y="68" font-size="14" fill="#111827">—</text>
+              <text x="10" y="56" font-size="13" fill="#94a3b8" font-family="'IBM Plex Sans',sans-serif">세그먼트 A</text>
+              <rect x="140" y="36" width="470" height="26" rx="4" fill="url(#barA)"/>
+              <text x="622" y="55" font-size="13" fill="#f8fafc" font-family="'IBM Plex Mono',monospace" font-weight="600">—</text>
             </g>
             <g>
-              <text x="20" y="136" font-size="14" fill="#344054">세그먼트 B</text>
-              <rect x="130" y="114" width="260" height="28" rx="4" fill="#d98319"/>
-              <text x="405" y="134" font-size="14" fill="#111827">—</text>
+              <text x="10" y="118" font-size="13" fill="#94a3b8" font-family="'IBM Plex Sans',sans-serif">세그먼트 B</text>
+              <rect x="140" y="98" width="260" height="26" rx="4" fill="url(#barB)"/>
+              <text x="412" y="117" font-size="13" fill="#f8fafc" font-family="'IBM Plex Mono',monospace" font-weight="600">—</text>
             </g>
             <g>
-              <text x="20" y="202" font-size="14" fill="#344054">세그먼트 C</text>
-              <rect x="130" y="180" width="130" height="28" rx="4" fill="#16a36d"/>
-              <text x="276" y="200" font-size="14" fill="#111827">—</text>
+              <text x="10" y="180" font-size="13" fill="#94a3b8" font-family="'IBM Plex Sans',sans-serif">세그먼트 C</text>
+              <rect x="140" y="160" width="130" height="26" rx="4" fill="url(#barC)"/>
+              <text x="282" y="179" font-size="13" fill="#f8fafc" font-family="'IBM Plex Mono',monospace" font-weight="600">—</text>
             </g>
-            <line x1="422" y1="32" x2="422" y2="248" stroke="#2563eb" stroke-dasharray="5 5"/>
-            <text x="432" y="36" font-size="12" fill="#2563eb">전체 기준</text>
+            <line x1="400" y1="20" x2="400" y2="210" stroke="rgba(59,130,246,0.5)" stroke-dasharray="4 4" stroke-width="1.5"/>
+            <text x="406" y="30" font-size="11" fill="#3b82f6" font-family="'IBM Plex Mono',monospace">전체 기준</text>
           </svg>
         </article>
 
-        <aside class="panel">
-          <h2>스토리 라인</h2>
-          <p>보고서와 같은 순서로 읽히는 4칸 요약.</p>
+        <aside class="card chart">
+          <div class="chart-title">스토리 라인</div>
+          <div class="chart-sub">보고서와 같은 순서로 읽히는 4칸 요약.</div>
           <!-- FROM: 03_problem_definition.md, 05_analysis_report.md -->
           <div class="story-list">
             <div class="story-row"><b>현황</b><span>현재 상태와 문제 크기를 쓴다.</span></div>
@@ -832,85 +824,99 @@
       </div>
     </section>
 
+    <!-- DRIVERS -->
     <section id="drivers" class="view">
       <div class="drivers-grid">
-        <article class="chart">
-          <h2>상위 드라이버는 어떤 차이를 만드는가?</h2>
-          <p>세그먼트, 변수, 범주별 격차를 실제 계산값으로 표시한다.</p>
+        <article class="card chart">
+          <div class="chart-title">상위 드라이버는 어떤 차이를 만드는가?</div>
+          <div class="chart-sub">세그먼트, 변수, 범주별 격차를 실제 계산값으로 표시한다.</div>
           <!-- FROM: 05_analysis_report.md -->
-          <svg viewBox="0 0 620 330" role="img" aria-label="상위 드라이버별 KPI 격차">
-            <line x1="70" y1="260" x2="580" y2="260" stroke="#d9e0ea"/>
-            <line x1="70" y1="70" x2="70" y2="260" stroke="#d9e0ea"/>
-            <rect x="110" y="104" width="64" height="156" rx="4" fill="#d92d4c"/>
-            <rect x="220" y="132" width="64" height="128" rx="4" fill="#d98319"/>
-            <rect x="330" y="164" width="64" height="96" rx="4" fill="#2563eb"/>
-            <rect x="440" y="204" width="64" height="56" rx="4" fill="#16a36d"/>
-            <text x="105" y="92" font-size="13" fill="#111827">—</text>
-            <text x="215" y="120" font-size="13" fill="#111827">—</text>
-            <text x="325" y="152" font-size="13" fill="#111827">—</text>
-            <text x="438" y="192" font-size="13" fill="#111827">—</text>
-            <text x="100" y="292" font-size="12" fill="#667085">driver A</text>
-            <text x="212" y="306" font-size="12" fill="#667085">driver B</text>
-            <text x="326" y="292" font-size="12" fill="#667085">driver C</text>
-            <text x="435" y="306" font-size="12" fill="#667085">driver D</text>
+          <svg viewBox="0 0 560 300" role="img" aria-label="상위 드라이버별 KPI 격차">
+            <defs>
+              <linearGradient id="d1" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#f43f5e" stop-opacity=".7"/><stop offset="100%" stop-color="#f43f5e"/></linearGradient>
+              <linearGradient id="d2" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity=".7"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+              <linearGradient id="d3" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#3b82f6" stop-opacity=".7"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+              <linearGradient id="d4" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#10b981" stop-opacity=".7"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
+            </defs>
+            <line x1="60" y1="20"  x2="520" y2="20"  stroke="rgba(255,255,255,0.05)"/>
+            <line x1="60" y1="80"  x2="520" y2="80"  stroke="rgba(255,255,255,0.05)"/>
+            <line x1="60" y1="140" x2="520" y2="140" stroke="rgba(255,255,255,0.05)"/>
+            <line x1="60" y1="200" x2="520" y2="200" stroke="rgba(255,255,255,0.05)"/>
+            <line x1="60" y1="240" x2="520" y2="240" stroke="rgba(255,255,255,0.12)"/>
+            <rect x="80"  y="84"  width="72" height="156" rx="5" fill="url(#d1)"/>
+            <rect x="200" y="112" width="72" height="128" rx="5" fill="url(#d2)"/>
+            <rect x="320" y="148" width="72" height="92"  rx="5" fill="url(#d3)"/>
+            <rect x="440" y="188" width="72" height="52"  rx="5" fill="url(#d4)"/>
+            <text x="98"  y="76"  font-size="12" fill="#f8fafc" font-family="'IBM Plex Mono',monospace" font-weight="600">—</text>
+            <text x="218" y="104" font-size="12" fill="#f8fafc" font-family="'IBM Plex Mono',monospace" font-weight="600">—</text>
+            <text x="338" y="140" font-size="12" fill="#f8fafc" font-family="'IBM Plex Mono',monospace" font-weight="600">—</text>
+            <text x="458" y="180" font-size="12" fill="#f8fafc" font-family="'IBM Plex Mono',monospace" font-weight="600">—</text>
+            <text x="80"  y="258" font-size="12" fill="#475569" font-family="'IBM Plex Sans',sans-serif">driver A</text>
+            <text x="200" y="258" font-size="12" fill="#475569" font-family="'IBM Plex Sans',sans-serif">driver B</text>
+            <text x="320" y="258" font-size="12" fill="#475569" font-family="'IBM Plex Sans',sans-serif">driver C</text>
+            <text x="440" y="258" font-size="12" fill="#475569" font-family="'IBM Plex Sans',sans-serif">driver D</text>
           </svg>
         </article>
 
-        <article class="chart">
-          <h2>드라이버별 조치 우선순위는 어떻게 다른가?</h2>
-          <p>위험 크기와 조치 가능성을 함께 보여준다.</p>
+        <article class="card chart">
+          <div class="chart-title">드라이버별 조치 우선순위는 어떻게 다른가?</div>
+          <div class="chart-sub">위험 크기와 조치 가능성을 함께 보여준다.</div>
           <!-- FROM: 04_kpi_summary.md, 05_analysis_report.md -->
-          <svg viewBox="0 0 560 330" role="img" aria-label="드라이버별 조치 우선순위">
-            <circle cx="170" cy="108" r="44" fill="#ffe4e8"/>
-            <circle cx="170" cy="108" r="30" fill="#d92d4c"/>
-            <text x="152" y="114" font-size="14" fill="#ffffff">높음</text>
-            <text x="124" y="174" font-size="13" fill="#344054">우선 조치</text>
-            <circle cx="340" cy="148" r="36" fill="#fff2dc"/>
-            <circle cx="340" cy="148" r="22" fill="#d98319"/>
-            <text x="328" y="154" font-size="13" fill="#ffffff">중</text>
-            <text x="302" y="206" font-size="13" fill="#344054">관찰 필요</text>
-            <circle cx="250" cy="238" r="34" fill="#dcfce7"/>
-            <circle cx="250" cy="238" r="18" fill="#16a36d"/>
-            <text x="238" y="244" font-size="12" fill="#ffffff">저</text>
-            <text x="212" y="294" font-size="13" fill="#344054">안정 구간</text>
+          <svg viewBox="0 0 480 300" role="img" aria-label="드라이버별 조치 우선순위">
+            <circle cx="148" cy="108" r="50" fill="rgba(244,63,94,0.08)"  stroke="rgba(244,63,94,0.2)"  stroke-width="1"/>
+            <circle cx="148" cy="108" r="34" fill="rgba(244,63,94,0.18)"/>
+            <circle cx="148" cy="108" r="22" fill="#f43f5e"/>
+            <text x="136" y="113" font-size="12" fill="#fff" font-family="'IBM Plex Sans',sans-serif" font-weight="700">높음</text>
+            <text x="110" y="180" font-size="12" fill="#94a3b8" font-family="'IBM Plex Sans',sans-serif">우선 조치</text>
+            <circle cx="300" cy="150" r="40" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.2)" stroke-width="1"/>
+            <circle cx="300" cy="150" r="26" fill="rgba(245,158,11,0.2)"/>
+            <circle cx="300" cy="150" r="16" fill="#f59e0b"/>
+            <text x="292" y="155" font-size="11" fill="#fff" font-family="'IBM Plex Sans',sans-serif" font-weight="700">중</text>
+            <text x="268" y="210" font-size="12" fill="#94a3b8" font-family="'IBM Plex Sans',sans-serif">관찰 필요</text>
+            <circle cx="420" cy="220" r="32" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+            <circle cx="420" cy="220" r="20" fill="rgba(16,185,129,0.18)"/>
+            <circle cx="420" cy="220" r="12" fill="#10b981"/>
+            <text x="413" y="225" font-size="10" fill="#fff" font-family="'IBM Plex Sans',sans-serif" font-weight="700">저</text>
+            <text x="390" y="274" font-size="12" fill="#94a3b8" font-family="'IBM Plex Sans',sans-serif">안정 구간</text>
           </svg>
         </article>
 
-        <article class="chart wide">
-          <h2>두 축을 같이 보면 어느 관측치가 우선인가?</h2>
-          <p>상위 드라이버 두 개를 축으로 놓고 우선 타겟, 관찰 구간, 안정 구간을 구분한다.</p>
+        <article class="card chart wide">
+          <div class="chart-title">두 축을 같이 보면 어느 관측치가 우선인가?</div>
+          <div class="chart-sub">상위 드라이버 두 개를 축으로 놓고 우선 타겟, 관찰 구간, 안정 구간을 구분한다.</div>
           <!-- FROM: 05_analysis_report.md -->
-          <svg viewBox="0 0 980 300" role="img" aria-label="드라이버 2축 비교">
-            <rect x="70" y="32" width="860" height="210" fill="#f8fafc" stroke="#d9e0ea"/>
-            <line x1="500" y1="32" x2="500" y2="242" stroke="#d9e0ea"/>
-            <line x1="70" y1="137" x2="930" y2="137" stroke="#d9e0ea"/>
-            <text x="76" y="58" font-size="12" fill="#667085">축 Y 높음</text>
-            <text x="836" y="232" font-size="12" fill="#667085">축 X 높음</text>
-            <circle cx="170" cy="74" r="10" fill="#d92d4c" opacity="0.88"/>
-            <circle cx="220" cy="88" r="7" fill="#d92d4c" opacity="0.72"/>
-            <circle cx="290" cy="104" r="12" fill="#d92d4c" opacity="0.68"/>
-            <circle cx="390" cy="82" r="8" fill="#d98319" opacity="0.78"/>
-            <circle cx="620" cy="176" r="9" fill="#16a36d" opacity="0.82"/>
-            <circle cx="760" cy="196" r="11" fill="#16a36d" opacity="0.72"/>
-            <circle cx="830" cy="164" r="7" fill="#16a36d" opacity="0.76"/>
-            <text x="146" y="46" font-size="13" fill="#d92d4c">우선 타겟</text>
+          <svg viewBox="0 0 960 280" role="img" aria-label="드라이버 2축 비교">
+            <rect x="70" y="24" width="860" height="210" rx="6" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <line x1="500" y1="24"  x2="500" y2="234" stroke="rgba(255,255,255,0.07)" stroke-dasharray="5 4"/>
+            <line x1="70"  y1="129" x2="930" y2="129" stroke="rgba(255,255,255,0.07)" stroke-dasharray="5 4"/>
+            <text x="76"  y="46"  font-size="11" fill="#475569" font-family="'IBM Plex Mono',monospace">↑ 축 Y 높음</text>
+            <text x="840" y="228" font-size="11" fill="#475569" font-family="'IBM Plex Mono',monospace">축 X 높음 →</text>
+            <text x="80"  y="60"  font-size="11" fill="rgba(244,63,94,0.6)" font-family="'IBM Plex Mono',monospace">우선 타겟</text>
+            <circle cx="160" cy="64"  r="11" fill="#f43f5e" opacity=".85"/>
+            <circle cx="230" cy="82"  r="7"  fill="#f43f5e" opacity=".7"/>
+            <circle cx="310" cy="100" r="13" fill="#f43f5e" opacity=".65"/>
+            <circle cx="400" cy="75"  r="8"  fill="#f59e0b" opacity=".8"/>
+            <circle cx="620" cy="172" r="10" fill="#10b981" opacity=".82"/>
+            <circle cx="760" cy="192" r="12" fill="#10b981" opacity=".72"/>
+            <circle cx="840" cy="158" r="7"  fill="#10b981" opacity=".76"/>
           </svg>
           <div class="legend">
-            <span><i style="background:#d92d4c"></i>높은 위험</span>
-            <span><i style="background:#d98319"></i>관찰 필요</span>
-            <span><i style="background:#16a36d"></i>안정 구간</span>
+            <span><i style="background:#f43f5e"></i>높은 위험</span>
+            <span><i style="background:#f59e0b"></i>관찰 필요</span>
+            <span><i style="background:#10b981"></i>안정 구간</span>
           </div>
         </article>
       </div>
     </section>
 
+    <!-- SCENARIO -->
     <section id="scenario" class="view">
       <div class="scenario">
         <div class="slider-panel">
-          <h2>룰/처리 용량 시뮬레이터</h2>
-          <p>개입 효과 데이터가 없으면 KPI 개선 예측이 아니라 관측 데이터 기반 룰 비교로 표시한다.</p>
+          <div class="panel-title">룰 / 처리 용량 시뮬레이터</div>
+          <div class="panel-sub" style="margin-bottom:0">개입 효과 데이터가 없으면 KPI 개선 예측이 아니라 관측 데이터 기반 룰 비교로 표시한다.</div>
           <!-- FROM: 05_analysis_report.md -->
-          <label for="capacity">처리 가능 대상 수: <span id="capacityLabel">2,000</span>명</label>
+          <label class="slider-label" for="capacity">처리 가능 대상 수: <span id="capacityLabel">2,000</span>명</label>
           <input id="capacity" type="range" min="500" max="4000" step="100" value="2000">
           <div class="scenario-number">
             <b>집중 룰 기준 예상 포함 이벤트</b>
@@ -919,140 +925,97 @@
           </div>
         </div>
 
-        <article class="chart">
-          <h2>룰을 넓히면 대상 규모와 이벤트율은 어떻게 바뀌는가?</h2>
-          <p>실제 개입 효과가 아니라 현재 표본에서 관측된 룰별 규모와 이벤트 집중도 비교다.</p>
-          <!-- FROM: 05_analysis_report.md, 08_validation_report.md -->
-          <svg viewBox="0 0 680 330" role="img" aria-label="룰별 대상 규모와 이벤트율">
-            <line x1="80" y1="260" x2="620" y2="260" stroke="#d9e0ea"/>
-            <text x="24" y="70" font-size="13" fill="#344054">집중 룰</text>
-            <rect x="160" y="52" width="220" height="26" rx="4" fill="#d92d4c"/>
-            <text x="392" y="70" font-size="13" fill="#111827">대상 n, 이벤트율 high</text>
-            <text x="24" y="132" font-size="13" fill="#344054">넓은 룰</text>
-            <rect x="160" y="114" width="390" height="26" rx="4" fill="#d98319"/>
-            <text x="562" y="132" font-size="13" fill="#111827">대상 n, 이벤트율 mid</text>
-            <text x="24" y="194" font-size="13" fill="#344054">보조 룰</text>
-            <rect x="160" y="176" width="300" height="26" rx="4" fill="#1d4ed8"/>
-            <text x="472" y="194" font-size="13" fill="#111827">대상 n, 이벤트율 mid</text>
-            <text x="160" y="292" font-size="13" fill="#667085">대상 규모, 이벤트율, 전체 이벤트 커버리지를 함께 비교</text>
-          </svg>
-        </article>
-        <article class="data-table wide">
-          <h2>룰 비교 계약</h2>
-          <p>이 표는 액션 효과 예측이 아니라 관측 데이터 기준의 우선순위 비교다.</p>
-          <table>
-            <thead><tr><th>룰</th><th>대상 수</th><th>이벤트율</th><th>주의</th></tr></thead>
-            <tbody>
-              <tr><td>집중 룰</td><td>—</td><td>—</td><td>표본 내 관측값이며 인과 효과가 아님</td></tr>
-              <tr><td>넓은 룰</td><td>—</td><td>—</td><td>중복 조건이면 커버리지 해석 주의</td></tr>
-            </tbody>
-          </table>
-        </article>
+        <div style="display:grid;gap:14px;">
+          <article class="card chart">
+            <div class="chart-title">룰을 넓히면 대상 규모와 이벤트율은 어떻게 바뀌는가?</div>
+            <div class="chart-sub">실제 개입 효과가 아니라 현재 표본에서 관측된 룰별 규모와 이벤트 집중도 비교다.</div>
+            <!-- FROM: 05_analysis_report.md, 08_validation_report.md -->
+            <svg viewBox="0 0 620 280" role="img" aria-label="룰별 대상 규모와 이벤트율">
+              <line x1="80" y1="240" x2="580" y2="240" stroke="rgba(255,255,255,0.1)"/>
+              <text x="10" y="58"  font-size="12" fill="#94a3b8" font-family="'IBM Plex Sans',sans-serif">집중 룰</text>
+              <rect x="80" y="42"  width="220" height="24" rx="4" fill="#f43f5e" opacity=".85"/>
+              <text x="310" y="59" font-size="12" fill="#f8fafc" font-family="'IBM Plex Mono',monospace" font-weight="600">대상 n · 이벤트율 high</text>
+              <text x="10" y="118" font-size="12" fill="#94a3b8" font-family="'IBM Plex Sans',sans-serif">넓은 룰</text>
+              <rect x="80" y="102" width="390" height="24" rx="4" fill="#f59e0b" opacity=".8"/>
+              <text x="480" y="119" font-size="12" fill="#f8fafc" font-family="'IBM Plex Mono',monospace" font-weight="600">대상 n · mid</text>
+              <text x="10" y="178" font-size="12" fill="#94a3b8" font-family="'IBM Plex Sans',sans-serif">보조 룰</text>
+              <rect x="80" y="162" width="300" height="24" rx="4" fill="#3b82f6" opacity=".8"/>
+              <text x="390" y="179" font-size="12" fill="#f8fafc" font-family="'IBM Plex Mono',monospace" font-weight="600">대상 n · mid</text>
+              <text x="80" y="260" font-size="11" fill="#475569" font-family="'IBM Plex Sans',sans-serif">대상 규모, 이벤트율, 전체 이벤트 커버리지를 함께 비교</text>
+            </svg>
+          </article>
+
+          <article class="card data-table">
+            <div class="chart-title">룰 비교 계약</div>
+            <div class="chart-sub">이 표는 액션 효과 예측이 아니라 관측 데이터 기준의 우선순위 비교다.</div>
+            <table>
+              <thead><tr><th>룰</th><th>대상 수</th><th>이벤트율</th><th>주의</th></tr></thead>
+              <tbody>
+                <tr><td>집중 룰</td><td class="mono">—</td><td class="mono">—</td><td>표본 내 관측값이며 인과 효과가 아님</td></tr>
+                <tr><td>넓은 룰</td><td class="mono">—</td><td class="mono">—</td><td>중복 조건이면 커버리지 해석 주의</td></tr>
+              </tbody>
+            </table>
+          </article>
+        </div>
       </div>
     </section>
 
+    <!-- EVIDENCE -->
     <section id="evidence" class="view">
       <div class="evidence-grid">
-        <article class="data-table">
-          <h2>지표 계약</h2>
-          <p><code>04_metrics.json</code>에서 읽은 KPI 정의를 그대로 노출한다.</p>
+        <article class="card data-table">
+          <div class="chart-title">지표 계약</div>
+          <div class="chart-sub"><code style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">04_metrics.json</code>에서 읽은 KPI 정의를 그대로 노출한다.</div>
           <!-- FROM: 04_metrics.json -->
           <table>
-            <thead>
-              <tr>
-                <th>KPI</th>
-                <th>계산식</th>
-                <th>값</th>
-                <th>상태</th>
-              </tr>
-            </thead>
+            <thead><tr><th>KPI</th><th>계산식</th><th>값</th><th>상태</th></tr></thead>
             <tbody>
-              <tr>
-                <td>핵심 KPI 1</td>
-                <td class="mono">formula</td>
-                <td>—</td>
-                <td>주의</td>
-              </tr>
-              <tr>
-                <td>핵심 KPI 2</td>
-                <td class="mono">formula</td>
-                <td>—</td>
-                <td>조치 필요</td>
-              </tr>
-              <tr>
-                <td>핵심 KPI 3</td>
-                <td class="mono">formula</td>
-                <td>—</td>
-                <td>관찰</td>
-              </tr>
+              <tr><td>핵심 KPI 1</td><td class="mono">formula</td><td class="mono">—</td><td><span class="status warn">주의</span></td></tr>
+              <tr><td>핵심 KPI 2</td><td class="mono">formula</td><td class="mono">—</td><td><span class="status danger">조치 필요</span></td></tr>
+              <tr><td>핵심 KPI 3</td><td class="mono">formula</td><td class="mono">—</td><td><span class="status ok">안정</span></td></tr>
             </tbody>
           </table>
         </article>
 
-        <article class="data-table">
-          <h2>검증 리포트 요약</h2>
-          <p><code>08_validation_report.md</code>가 있으면 핵심 판정을 표시하고, 없으면 stage 7 검증 예정으로 표시한다.</p>
-          <!-- FROM: 08_validation_report.md when available; otherwise mark pending -->
+        <article class="card data-table">
+          <div class="chart-title">검증 리포트 요약</div>
+          <div class="chart-sub"><code style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">08_validation_report.md</code>가 있으면 핵심 판정을 표시하고, 없으면 stage 7 검증 예정으로 표시한다.</div>
+          <!-- FROM: 08_validation_report.md when available -->
           <table>
-            <thead>
-              <tr>
-                <th>항목</th>
-                <th>상태</th>
-                <th>비고</th>
-              </tr>
-            </thead>
+            <thead><tr><th>항목</th><th>상태</th><th>비고</th></tr></thead>
             <tbody>
-              <tr>
-                <td>수치 일관성</td>
-                <td>검증 예정</td>
-                <td>stage 7에서 metrics.json과 HTML KPI 일치 여부 확인</td>
-              </tr>
-              <tr>
-                <td>재현성</td>
-                <td>검증 예정</td>
-                <td>stage 7에서 05_analysis.py 실행과 05_analysis.ipynb 유효성 확인</td>
-              </tr>
-              <tr>
-                <td>해석 리스크</td>
-                <td>주의</td>
-                <td>상관관계, 표본 한계, 누락 변수 등을 명시</td>
-              </tr>
+              <tr><td>수치 일관성</td><td><span class="status pending">검증 예정</span></td><td>stage 7에서 metrics.json과 HTML KPI 일치 여부 확인</td></tr>
+              <tr><td>재현성</td><td><span class="status pending">검증 예정</span></td><td>stage 7에서 05_analysis.py 실행과 노트북 유효성 확인</td></tr>
+              <tr><td>해석 리스크</td><td><span class="status warn">주의</span></td><td>상관관계, 표본 한계, 누락 변수 등을 명시</td></tr>
             </tbody>
           </table>
         </article>
       </div>
     </section>
+
   </main>
 
   <script>
-    const tabs = document.querySelectorAll(".tab");
-    const views = document.querySelectorAll(".view");
-
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
         const id = tab.dataset.tab;
-        const target = document.getElementById(id);
-        if (!target) return;
-        tabs.forEach((item) => item.classList.toggle("active", item === tab));
-        views.forEach((view) => view.classList.toggle("active", view === target));
+        document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === tab));
+        document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === id));
       });
     });
 
-    const capacity = document.querySelector("#capacity");
-    const capacityLabel = document.querySelector("#capacityLabel");
-    const scenarioValue = document.querySelector("#scenarioValue");
+    const capacity = document.getElementById('capacity');
+    const capacityLabel = document.getElementById('capacityLabel');
+    const scenarioValue = document.getElementById('scenarioValue');
 
     function updateScenario() {
-      if (!capacity || !capacityLabel || !scenarioValue) return;
-      const selected = Number(capacity.value);
-      capacityLabel.textContent = selected.toLocaleString("ko-KR");
-      scenarioValue.textContent = `${Math.round(selected * 0.4).toLocaleString("ko-KR")}건`;
+      const n = Number(capacity.value);
+      capacityLabel.textContent = n.toLocaleString('ko-KR');
+      scenarioValue.textContent = `${Math.round(n * 0.4).toLocaleString('ko-KR')}건`;
     }
 
-    if (capacity) {
-      capacity.addEventListener("input", updateScenario);
-      updateScenario();
-    }
+    capacity?.addEventListener('input', updateScenario);
+    updateScenario();
   </script>
 </body>
 </html>

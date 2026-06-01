@@ -15,28 +15,33 @@ Dashboard stage와 모든 시각화에 공통 적용됩니다.
 - 페이지 섹션을 떠 있는 큰 카드처럼 중첩하지 않습니다. 카드형 UI는 KPI, 차트, 표, 검증 항목에만 사용합니다.
 
 ## 색상
-- 배경: `#eef2f7`
-- 기본 표면: `#ffffff`
-- 보조 표면: `#f9fafb`
-- 상단 작업바: `#111827`
-- 본문 텍스트: `#111827`
-- 보조 텍스트: `#667085`
-- 경계선: `#cfd8e3`
-- 정보/기준: `#1d4ed8`
-- 좋음/긍정: `#16a36d`
-- 나쁨/위험: `#d92d4c`
-- 경고/보통: `#d98319`
-- KPI 수치: `#0a0a0a` 검정 고정 — **수치에 색상 절대 금지**
+다크 테마 기준입니다. CSS 변수로 관리하며, 모든 컴포넌트는 아래 토큰을 사용합니다.
+
+- `--bg-base`: `#060b14` — 페이지 배경 (28px dot-grid 오버레이 적용)
+- `--bg-surface`: `rgba(255,255,255,0.035)` — 카드 기본 배경
+- `--bg-surface-2`: `rgba(255,255,255,0.06)` — 내부 중첩 표면
+- `--bg-surface-3`: `rgba(255,255,255,0.09)` — 활성 탭 등 강조 표면
+- `--border`: `rgba(255,255,255,0.08)` — 기본 경계선
+- `--border-strong`: `rgba(255,255,255,0.16)` — 강조 경계선 (hover 등)
+- `--text-primary`: `#f1f5f9`
+- `--text-secondary`: `#94a3b8`
+- `--text-muted`: `#475569`
+- `--blue / --blue-dim / --blue-glow`: `#3b82f6` 계열 — 정보/기준
+- `--green / --green-dim / --green-glow`: `#10b981` 계열 — 좋음/긍정
+- `--red / --red-dim / --red-glow`: `#f43f5e` 계열 — 나쁨/위험
+- `--amber / --amber-dim / --amber-glow`: `#f59e0b` 계열 — 경고/보통
+- KPI 수치는 해당 상태 컬러를 적용합니다 (blue→`#93c5fd`, red→`#fda4af`, green→`#6ee7b7`, amber→`#fcd34d`)
 
 ## 컴포넌트
-- 카드 radius는 `8px` 이하로 유지합니다.
-- 탭은 segmented control처럼 보이게 만들고, active 탭만 진한 배경을 사용합니다.
-- 위험/좋음/주의는 `.dot`, `.chip`, `.badge`로 표시합니다.
+- 카드 radius: `--radius: 10px`, 내부 중첩 요소: `--radius-sm: 7px`
+- 카드는 `backdrop-filter: blur(8px)` 글래스모피즘 스타일을 기본으로 합니다.
+- 탭은 frosted glass sticky 바 형태이며, active 탭만 `--bg-surface-3` + `--border-strong` 배경을 사용합니다.
+- 위험/좋음/주의는 `.kpi-dot`, `.chip`, `.badge`, `.status`로 표시합니다.
+- `.run-item`은 좌측 3px accent border로 상태를 표시합니다 (pass→green, warn→amber).
 - KPI 카드에는 다음 정보를 포함합니다.
   - KPI 이름
-  - 값
+  - 값 (IBM Plex Mono 42px, 상태 컬러 적용)
   - 계산 기준 또는 표본
-  - baseline/segment/unit
   - 상태 chip
 - 검증 상태 패널에는 최소 `metrics.json`, `analysis.py`, `analysis.ipynb`, 데이터 품질, run ID를 표시합니다.
 
@@ -51,11 +56,13 @@ Dashboard stage와 모든 시각화에 공통 적용됩니다.
 - SVG 좌표 검증 필수: `<rect>`의 `x`, `y`, `width`, `height`는 모두 0 이상이어야 하며, 막대와 레이블이 viewBox 밖으로 나가면 안 됩니다.
 
 ## 타이포그래피
-- 외부 폰트를 불러오지 않습니다. 시스템 폰트 스택을 사용합니다.
+- Google Fonts에서 세 가지 폰트를 로드합니다.
+  - `Syne` (700/800) — 헤딩, 탭, 카드 타이틀 등 display 용도
+  - `IBM Plex Sans` (400/500/600/700) — 본문 및 UI 레이블
+  - `IBM Plex Mono` (400/500/600) — KPI 수치, 상태 chip, 코드, 축 레이블 등 데이터 표시
 - 한글 텍스트는 `word-break: keep-all`을 기본으로 하고, 표와 좁은 칸은 `overflow-wrap: anywhere`를 허용합니다.
 - viewport width로 폰트 크기를 스케일하지 않습니다. 반응형 크기 변화는 media query로만 처리합니다.
-- letter spacing은 `0`을 기본으로 유지합니다.
-- KPI 숫자는 굵게 표시하되 검정색으로 유지합니다.
+- KPI 숫자는 IBM Plex Mono 42px, 상태에 따른 컬러를 적용합니다.
 
 ## 반응형
 - 데스크톱: topbar 2열, KPI 4열, chart grid 2열을 기본으로 합니다.
@@ -74,12 +81,11 @@ Dashboard stage와 모든 시각화에 공통 적용됩니다.
 - 결측, 중복, 표본 제한, 인과 해석 제한은 숨기지 않습니다.
 
 ## 금지
-- KPI 수치에 색상 적용
-- `border-left` 등 한쪽 변만 있는 border
-- 외부 chart/font CDN 의존성
+- 외부 chart CDN 의존성 (Chart.js, D3, Plotly 등) — SVG/Canvas만 허용
 - 기본 이모지 사용
 - 이유 없는 파이 차트 / 3D 차트
 - 한 탭에 차트 8개 이상
 - 분석에서 나오지 않은 지표 임의 추가
 - Evidence 없이 숫자만 보여주는 화면
-- 화면 전체를 검은색, 보라색, 베이지색 계열 하나로 몰아가는 단색 테마
+- 다크 테마를 임의로 라이트 테마로 되돌리는 것
+- CSS 변수 토큰을 우회하여 하드코딩된 색상 직접 사용

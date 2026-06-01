@@ -32,8 +32,20 @@ def register(ctx) -> None:
             emoji=emoji,
         )
 
+    def _handle_ai_pipeline(raw_args: str) -> str | None:
+        result = handle_slash(raw_args)
+        if isinstance(result, str) and result.startswith("AI analyst pipeline run created."):
+            injected = False
+            inject = getattr(ctx, "inject_message", None)
+            if callable(inject):
+                injected = bool(inject(result, role="user"))
+            if injected:
+                return "AI pipeline run을 생성했고, 7단계 분석을 바로 이어서 시작합니다."
+            return result
+        return result
+
     ctx.register_command(
         "ai-pipeline",
-        handler=handle_slash,
+        handler=_handle_ai_pipeline,
         description="7-stage AI data analysis pipeline — run, status, workflow, inputs, outputs, read.",
     )
