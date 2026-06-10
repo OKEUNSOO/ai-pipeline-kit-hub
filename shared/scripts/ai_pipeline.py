@@ -553,7 +553,7 @@ def guarded(func, args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Codex helper CLI for ai-pipeline-kit.")
+    parser = argparse.ArgumentParser(description="Helper CLI for ai-analyst-pipeline.")
     sub = parser.add_subparsers(dest="command", required=True)
 
     create = sub.add_parser("create-run", help="Create a run and record source file paths without copying data.")

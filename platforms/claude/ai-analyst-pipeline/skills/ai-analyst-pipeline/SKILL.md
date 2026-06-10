@@ -1,7 +1,7 @@
 ---
 name: ai-analyst-pipeline
-version: "0.1.0"
-description: Run a durable analyst-ready AI data analysis pipeline for CSV, Excel, JSON, TSV, PDF, or text-table datasets. Use when the user asks Codex to analyze data files, run an AI/data-analysis pipeline, handle multiple datasets, create EDA/KPI/metrics JSON/reproducible Python/notebook/dashboard/report outputs, continue or validate an ai-pipeline run, or inspect run-scoped pipeline outputs.
+version: "1.0.0"
+description: Run a durable analyst-ready AI data analysis pipeline for CSV, Excel, JSON, TSV, PDF, or text-table datasets. Use when the user asks to analyze data files, run an AI/data-analysis pipeline, handle multiple datasets, create EDA/KPI/metrics JSON/reproducible Python/notebook/dashboard/report outputs, continue or validate an ai-pipeline run, or inspect run-scoped pipeline outputs.
 platforms: [macos, linux, windows]
 metadata:
   hermes:
@@ -134,6 +134,17 @@ When filling the template:
 - Keep charts question-driven: each chart should answer a specific decision question.
 - Keep `Evidence` visible with metric definitions, `05_analysis.py` and `05_analysis.ipynb` reproducibility status, validation-pending or `08_validation_report.md` summary, and data-quality limits.
 - Verify the saved HTML is self-contained and opens locally.
+
+## Open Output Folder (optional)
+
+After the pipeline succeeds and `validate-outputs` passes, you may open the run's output folder when the user asks for it or the context makes it clearly useful:
+
+```bash
+cd "<output_dir>" && antigravity .
+```
+
+- Run only once, after success and validation. Never on a failed or interrupted run.
+- If you open it, include `Antigravity로 산출물 폴더를 열었습니다: <output_dir>` in the final message.
 
 ## Completion Response
 

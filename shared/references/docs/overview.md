@@ -25,9 +25,10 @@ CSV · Excel · JSON · TSV · PDF 등 형식 무관 — 데이터 파일 경로
 
 | 스킬 | 역할 |
 |------|------|
-| `run-pipeline` | 7단계 분석 파이프라인 순차 실행 (run 단위 산출물 관리) |
-| `dashboard-design` | AI Pipeline 전용 대시보드 디자인 시스템 |
-| `visualize` | 인사이트 → 질문 중심 HTML 대시보드 제작 |
+| `ai-analyst-pipeline` | 진입점. 7단계 분석 파이프라인 순차 실행 (run 단위 산출물 관리) |
+| `visualize` | 인사이트 → 질문 중심 HTML 대시보드 단독 제작 |
+
+> 대시보드 디자인 시스템은 별도 스킬이 아니라 `references/rules/design-system.md`(다크 테마, 단일 권위 소스)로 관리한다.
 
 ## 파이프라인 구조
 
@@ -158,7 +159,7 @@ Codex helper 기준으로는 `python3 scripts/ai_pipeline.py create-run --path <
 - 순수 SVG/Canvas만 사용 — Chart.js, D3 등 CDN 라이브러리 금지
 - KPI 수치에는 색상 적용 금지
 - 기본 이모지 사용 금지 — 아이콘이 필요하면 인라인 SVG 사용
-- 대시보드 디자인 상세는 `dashboard-design` 스킬과 `skills/dashboard-design/references/design-tokens.md` 참고
+- 대시보드 디자인 상세는 `references/rules/design-system.md`(다크 테마, 단일 권위 소스) 참고
 
 ## Codex 통합 기준
 
