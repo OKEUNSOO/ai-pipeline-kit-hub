@@ -19,27 +19,34 @@ curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-analyst-pipeline/main/ins
 curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-analyst-pipeline/main/install.sh | bash -s -- all
 ```
 
-**gh CLI:**
+**로컬 클론 후 설치:**
 
 ```bash
-gh skill install OKEUNSOO/ai-analyst-pipeline --agent claude-code --scope user
-gh skill install OKEUNSOO/ai-analyst-pipeline --agent codex --scope user
+git clone https://github.com/OKEUNSOO/ai-analyst-pipeline
+cd ai-analyst-pipeline
+./install.sh claude        # 또는: codex | hermes | openclaw | gemini | all
+```
+
+**업데이트:**
+
+```bash
+curl -sL https://raw.githubusercontent.com/OKEUNSOO/ai-analyst-pipeline/main/install.sh | bash -s -- update claude
 ```
 
 ## 설치 경로
 
 | 플랫폼 | 설치 경로 |
 |--------|----------|
-| Claude Code | `~/.claude/plugins/ai-pipeline-kit/skills/` |
-| Codex | `~/.codex/plugins/ai-pipeline-kit/` |
-| Hermes | `~/.hermes/skills/ai-pipeline-kit/` |
-| OpenClaw | `~/.openclaw/skills/ai-pipeline-kit/` |
-| Gemini CLI | `~/.gemini/skills/ai-pipeline-kit/` |
+| Claude Code | `~/.claude/plugins/local/ai-analyst-pipeline/` |
+| Codex | `~/.codex/plugins/ai-analyst-pipeline/` |
+| Hermes | `~/.hermes/plugins/ai_analyst_pipeline/` |
+| OpenClaw | `~/.openclaw/skills/ai-analyst-pipeline/` |
+| Gemini CLI | `~/.gemini/skills/ai-analyst-pipeline/` |
 
 ## 사용법
 
 ```text
-ai-pipeline-kit으로 /path/to/data.csv 분석해줘
+ai-analyst-pipeline으로 /path/to/data.csv 분석해줘
 ```
 
 ## 파이프라인 단계
